@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,12 @@ Route::post('/forget-password', [AuthController::class, 'forgetPassword'])->name
 
 Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::get('/admin/dashboard', [AuthController::class, 'adminDashboard']);
+
+    //subject route
+    Route::post('/create-subject', [AdminController::class, 'createSubject'])->name('createSubject');
+    Route::post('/update-subject', [AdminController::class, 'updateSubject'])->name('updateSubject');
+    Route::post('/delete-subject', [AdminController::class, 'deleteSubject'])->name('deleteSubject');
+
 });
 
 Route::group(['middleware' => ['web', 'checkStudent']], function() {

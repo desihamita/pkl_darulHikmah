@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Models\PasswordReset;
+use App\Models\Subject;
 use Mail;
 
 class AuthController extends Controller
@@ -75,7 +76,8 @@ class AuthController extends Controller
     }
 
     public function adminDashboard(){
-        return view('admin.dashboard');
+        $subjects = Subject::all();
+        return view('admin.dashboard', compact('subjects'));
     }
 
     public function logout(Request $request){
