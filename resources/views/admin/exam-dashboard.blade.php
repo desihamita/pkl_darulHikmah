@@ -17,6 +17,7 @@
             <th scope="col">Subject</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
+            <th scope="col">Attempt</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -28,7 +29,8 @@
                         <td>{{ $exam->exam_name }}</td>
                         <td>{{ $exam->subjects[0]['subject'] }}</td>
                         <td>{{ $exam->date }}</td>
-                        <td>{{ $exam->time }} Hrs</td>
+                        <td>{{ $exam->time }} hrs</td>
+                        <td>{{ $exam->attempt }} </td>
                         <td>
                             <button class="btn btn-info updateButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#updateExamModal">Update</button>
 
@@ -69,6 +71,8 @@
                         <input type="date" name="date" class="w-100" min="@php echo date('Y-m-d'); @endphp" required>
                         <br><br>
                         <input type="time" name="time" class="w-100" required>
+                        <br><br>
+                        <input type="number" name="attempt" class="w-100" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -105,6 +109,8 @@
                         <input type="date" name="date" class="w-100" min="@php echo date('Y-m-d'); @endphp" id="exam_date" required>
                         <br><br>
                         <input type="time" name="time" class="w-100" id="exam_time" required>
+                        <br><br>
+                        <input type="number" name="attempt" class="w-100" id="exam_attempt" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -179,6 +185,7 @@
                             $("#exam_subject_id").val(exam[0].subject_id);
                             $("#exam_time").val(exam[0].time);
                             $("#exam_date").val(exam[0].date);
+                            $("#exam_attempt").val(exam[0].attempt);
                         } else {
                             alert(data.msg);
                         }

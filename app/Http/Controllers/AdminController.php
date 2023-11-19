@@ -57,7 +57,8 @@ class AdminController extends Controller
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'time' => $request->time,
-                'date' => $request->date
+                'date' => $request->date,
+                'attempt' => $request->attempt
             ]);
 
             return response()->json(['success' => true, 'msg' => 'Exam Added Successfully!']);
@@ -83,6 +84,7 @@ class AdminController extends Controller
             $exam->subject_id = $request->subject_id;
             $exam->date = $request->date;
             $exam->time = $request->time;
+            $exam->attempt = $request->attempt;
             $exam->save();
 
             return response()->json(['success' => true, 'msg' => 'Exam updated Successfully!']);
