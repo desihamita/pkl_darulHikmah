@@ -32,7 +32,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="4">Subjects not found!</td>
+                    <td colspan="3">Subjects not found!</td>
                 </tr>
             @endif
         </tbody>
