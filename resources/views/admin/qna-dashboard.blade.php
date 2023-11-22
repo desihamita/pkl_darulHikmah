@@ -8,6 +8,72 @@
         Add QnA
     </button>
 
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Question</th>
+            <th scope="col">Answer</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+            @if (count($questions) > 0)
+                @foreach ($questions as $question)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $question->question }}</td>
+                        <td>
+                            <button class="btn btn-info ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-info updateButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#updateSubjectModal">Update</button>
+
+                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#deleteSubjectModal">Delete</button>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="3">Questions and Answers not found!</td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
+
+    {{-- show answer modal --}}
+    <div class="modal fade" id="showAnsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Show Answers</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Answer</th>
+                                <th>Is Correct</th>
+                            </tr>
+                        </thead>
+                        <tbody class="showAnswers">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- modal create Qna --}}
     <div class="modal fade" id="addQnaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -102,7 +168,37 @@
 
             $(document).on("click", ".removeButton", function() {
                 $(this).closest('.answers').remove();
-            })
+            });
+
+            // show answer
+            $(".ansButton").click(function() {
+                var questions = @json($questions);
+                var qid = $(this).attr('data-id');
+                var html = '';
+
+                for (let i = 0; i < questions.length; i++) {
+                    if (questions[i]['id'] == qid) {
+                        var answerLength = questions[i]['answers'].length;
+                        for (let j = 0; j < answerLength; j++) {
+                            let is_correct = 'No';
+
+                            if (questions[i]['answers'][j]['is_correct'] == 1) {
+                                is_correct = 'Yes';
+                            }
+
+                            html += `
+                                <tr>
+                                    <td>`+ (j+1) +`</td>
+                                    <td>`+ questions[i]['answers'][j]['answer'] +`</td>
+                                    <td>`+ is_correct +`</td>
+                                </tr>
+                            `;
+                        }
+                        break;
+                    }
+                }
+                $('.showAnswers').html(html);
+            });
         })
     </script>
 @endsection
