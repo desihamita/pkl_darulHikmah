@@ -50,6 +50,10 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::post('/update-exam', [AdminController::class, 'updateExam'])->name('updateExam');
     Route::post('/delete-exam', [AdminController::class, 'deleteExam'])->name('deleteExam');
 
+    // Q&A Route
+    Route::get('/admin/qna-ans', [AdminController::class, 'qnaDashboard']);
+    Route::post('/create-qna-ans', [AdminController::class, 'createQna'])->name('createQna');
+
 });
 
 Route::group(['middleware' => ['web', 'checkStudent']], function() {

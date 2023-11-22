@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Subject;
 use App\Models\Exam;
+use App\Models\Question;
+use App\Models\Answer;
 
 class AdminController extends Controller
 {
@@ -98,6 +100,36 @@ class AdminController extends Controller
             Exam::where('id', $request->exam_id)->delete();
 
             return response()->json(['success' => true, 'msg' => 'Exam deleted Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    // QnA
+    public function qnaDashboard(){
+        return view('admin.qna-dashboard');
+    }
+
+    public function createQna(Request $request){
+        try {
+            $questionId = Question::insertGetId([
+                'question' => $request->question
+            ]);
+
+            foreach ($request->answers as $answer) {
+                $is_correct = 0;
+                if ($request->is_correct == $answer) {
+                    $is_correct = 1;
+                } 
+
+                Answer::insert([
+                    'question_id' => $questionId,
+                    'answer' => $answer,
+                    'is_correct' => $is_correct
+                ]);
+            }
+
+            return response()->json(['success' => true, 'msg' => "Qna Added Successfully!"]);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
