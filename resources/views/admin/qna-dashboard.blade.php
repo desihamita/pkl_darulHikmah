@@ -29,7 +29,7 @@
                         <td>
                             <button class="btn btn-info updateButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#updateQnaModal">Update</button>
 
-                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#deleteSubjectModal">Delete</button>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#deleteQnaModal">Delete</button>
                         </td>
                     </tr>
                 @endforeach
@@ -133,6 +133,31 @@
         </div>
     </div>
 
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteQnaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Qna</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                <form id="deleteQna">
+                    @csrf
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete Qna?</p>
+                        <input type="hidden" name="id" id="delete_qna_id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function(){
             $("#createQna").submit(function(e){
@@ -202,7 +227,6 @@
                 parentDiv.find('.is_correct, .edit_is_correct').remove();
                 parentDiv.remove();
             });
-
 
             // show answer
             $(".ansButton").click(function() {
@@ -346,6 +370,31 @@
                        } else {
                             alert(data.msg);
                        }
+                    }
+                });
+            });
+
+            // delete Qna
+            $('.deleteButton').click(function() {
+                var id = $(this).attr('data-id');
+                $('#delete_qna_id').val(id)
+            });
+
+            $('#deleteQna').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: "{{ route('deleteQna') }}",
+                    type: "POST",
+                    data: formData,
+                    success: function (data) {
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
                     }
                 });
             });
