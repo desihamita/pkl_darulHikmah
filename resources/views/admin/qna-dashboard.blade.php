@@ -108,7 +108,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Update Qna</h5>
-                    <button id="updateAnswer" class="btn btn-info ml-5">Update Answer</button>
+                    <button id="updateAnswer" class="btn btn-info ml-5">Create Answer</button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -116,7 +116,7 @@
                 <form id="updateQna">
                     @csrf
                     <div class="modal-body updateModalAnswers">
-                        <div class="row ">
+                        <div class="row">
                             <div class="col">
                                 <input type="hidden" name="question_id" id="question_id">
                                 <input type="text" class="w-100" name="question" id="question" placeholder="Enter Question" required>
@@ -284,7 +284,7 @@
                                     <input type="radio" name="is_correct" class="edit_is_correct" `+ checked +`>
                                     <div class="col">
                                         <input type="text" class="w-100" name="answers[`+ qna['answers'][i]['id'] +`]" value="`+ qna['answers'][i]['answer'] +`" placeholder="Enter Answer" required>
-                                        <button class="btn btn-danger removeButton">Remove</button>
+                                        <button class="btn btn-danger removeButton removeAnswer" data-id="`+ qna['answers'][i]['id'] +`">Remove</button>
                                     </div>
                                 </div>
                             `;
@@ -312,7 +312,19 @@
                         }
                     }
                     if (checkIsCorrect) {
-                        
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            url: "{{ route('updateQna') }}",
+                            type: "POST",
+                            data: formData,
+                            success: function(data){
+                                if (data.success == true) {
+                                    location.reload();
+                                } else {
+                                    alert(data.msg);
+                                }
+                            }
+                        });
                     } else {
                         $(".updateError").text("Please select anyone correct answer.")
                         setTimeout(() => {
@@ -320,6 +332,22 @@
                         }, 2000);
                     }
                 }
+            });
+
+            //remove answer
+            $(document).on('click', '.removeAnswer', function(){
+                var ansId = $(this).attr('data-id');
+                $.ajax({
+                    url: "{{ route('deleteAns') }}",
+                    data: { id: ansId},
+                    success: function(data){
+                       if (data.success == true) {
+                            console.log(data.msg);
+                       } else {
+                            alert(data.msg);
+                       }
+                    }
+                });
             });
         });
     </script>
