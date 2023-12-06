@@ -6,8 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Models\Subject;
 use App\Models\Exam;
+
+//import qna
 use App\Models\Question;
 use App\Models\Answer;
+use App\Imports\QnaImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -121,7 +125,7 @@ class AdminController extends Controller
                 $is_correct = 0;
                 if ($request->is_correct == $answer) {
                     $is_correct = 1;
-                } 
+                }
 
                 Answer::insert([
                     'question_id' => $questionId,
@@ -149,41 +153,41 @@ class AdminController extends Controller
     public function updateQna(Request $request){
         try {
             Question::where('id', $request->question_id)->update([
-                'question' => $request->question 
+                'question' => $request->question
             ]);
 
             if (isset($request->answers)) {
                 foreach ($request->answers as $key => $value) {
                     $is_correct = 0;
-                    
+
                     if ($request->is_correct == $value) {
                         $is_correct = 1;
                     }
-                    
+
                     Answer::where('id', $key)->update([
                         'question_id' => $request->question_id,
                         'answer' => $value,
                         'is_correct' => $is_correct
                     ]);
                 }
-            } 
-            
+            }
+
             //new answer added
             if (isset($request->new_answers)) {
                 foreach ($request->new_answers as $answer) {
                     $is_correct = 0;
-                    
+
                     if ($request->is_correct == $answer) {
                         $is_correct = 1;
                     }
-                    
+
                     Answer::insert([
                         'question_id' => $request->question_id,
                         'answer' => $answer,
                         'is_correct' => $is_correct
                     ]);
                 }
-            } 
+            }
 
             return response()->json(['success' => true, 'msg' => 'Qna updated Successfully!']);
         } catch (\Exception $ex) {
@@ -196,5 +200,14 @@ class AdminController extends Controller
         Answer::where('question_id', $request->id)->delete();
 
         return response()->json(['success' => true, 'msg' => 'Qna Deleted Successfully!']);
+    }
+
+    public function importQna(Request $request){
+        try {
+            Excel::import(new QnaImport, $request->file('file'));
+            return response()->json(['success'=> true,'msg'=> 'Import Qna Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
     }
 }

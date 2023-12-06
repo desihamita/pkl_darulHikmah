@@ -7,6 +7,9 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addQnaModal">
         Add QnA
     </button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importQnaModal">
+        Import QnA
+    </button>
 
     <table class="table">
         <thead>
@@ -24,7 +27,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $question->question }}</td>
                         <td>
-                            <button class="btn btn-info ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</button>
+                            <a href="#" class="ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</a>
                         </td>
                         <td>
                             <button class="btn btn-info updateButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#updateQnaModal">Update</button>
@@ -152,6 +155,31 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal fade" id="importQnaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Import Qna</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                <form id="importQna" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="file" name="file" id="fileupload" required accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-info">Import Qna</button>
                     </div>
                 </form>
             </div>
@@ -389,6 +417,36 @@
                     url: "{{ route('deleteQna') }}",
                     type: "POST",
                     data: formData,
+                    success: function (data) {
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+
+            // import Qna 
+            $('#importQna').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData();
+
+                formData.append("file", fileupload.files[0]);
+
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRF-TOKEN":"{{ csrf_token() }}",
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('importQna') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function (data) {
                         if (data.success == true) {
                             location.reload();
