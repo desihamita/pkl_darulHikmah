@@ -7,7 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
 
-//import qna
+// user
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
+use Mail;
+
+// qna
 use App\Models\Question;
 use App\Models\Answer;
 use App\Imports\QnaImport;
@@ -206,6 +213,39 @@ class AdminController extends Controller
         try {
             Excel::import(new QnaImport, $request->file('file'));
             return response()->json(['success'=> true,'msg'=> 'Import Qna Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    // students
+    public function studentDashboard(){
+        $students = User::where('is_admin', 0)->get();
+        return view('admin.student-dashboard', compact('students'));
+    }
+
+    public function createStudent(Request $request){
+        try {
+            $password = Str::random(8);
+            User::insert([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($password);
+            ]);
+
+            $url = URL::to('/');
+
+            $data['url'] = $url;
+            $data['name'] = $request->name;
+            $data['email'] = $request->email;
+            $data['password'] = $password;
+            $data['title'] =  "Student Registration on EXAMOnlineSystem";
+
+            Mail::send('resgistrationMail', ['data' => $data], function($message) use ($data) {
+                $message->to($data['email'])->subject($data['title']);
+            });
+
+            return response()->json(['success' => true, 'msg' => 'Student added Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
