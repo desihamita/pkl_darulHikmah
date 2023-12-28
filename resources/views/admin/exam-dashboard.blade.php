@@ -18,6 +18,7 @@
             <th scope="col">Date</th>
             <th scope="col">Time</th>
             <th scope="col">Attempt</th>
+            <th scope="col">Add Question</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -27,10 +28,13 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $exam->exam_name }}</td>
-                        <td>{{ $exam->subjects[0]['subject'] }}</td>
+                        <td>{{ $exam->subjects->subject }}</td>
                         <td>{{ $exam->date }}</td>
                         <td>{{ $exam->time }} hrs</td>
                         <td>{{ $exam->attempt }} </td>
+                        <td>
+                            <a href="" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModal">Add Question</a>
+                        </td>
                         <td>
                             <button class="btn btn-info updateButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#updateExamModal">Update</button>
 
@@ -142,6 +146,30 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Answer Modal -->
+    <div class="modal fade" id="addQnaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add QnA</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="createQna">
+                    @csrf
+                    <div class="modal-body">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
             </div>
