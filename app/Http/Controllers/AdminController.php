@@ -17,7 +17,9 @@ use Mail;
 // qna
 use App\Models\Question;
 use App\Models\Answer;
+
 use App\Imports\QnaImport;
+use App\Imports\UserImport;
 
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -236,21 +238,43 @@ class AdminController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($password),
+                'nis' => $request->nis
             ]);
 
-            $url = URL::to('/');
-
-            $data['url'] = $url;
-            $data['name'] = $request->name;
-            $data['email'] = $request->email;
-            $data['password'] = $password;
-            $data['title'] =  "Student Registration on EXAMOnlineSystem";
-
-            Mail::send('resgistrationMail', ['data' => $data], function($message) use ($data) {
-                $message->to($data['email'])->subject($data['title']);
-            });
-
             return response()->json(['success' => true, 'msg' => 'Student added Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    public function updateStudent(Request $request){
+        try {
+            $student = User::find($request->id);
+            $student->nis = $request->nis;
+            $student->name = $request->nama;
+            $student->email = $request->email;
+            $student->save();
+
+            return response()->json(['success' => true, 'msg' => 'Student updated Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    public function deleteStudent(Request $request){
+        try {
+            User::where('id', $request->id)->delete();
+
+            return response()->json(['success' => true, 'msg' => 'Student deleted Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    public function importStudent(Request $request){
+        try {
+            Excel::import(new UserImport, $request->file('file'));
+            return response()->json(['success'=> true,'msg'=> 'Import Student Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }

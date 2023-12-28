@@ -62,9 +62,11 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     // students routing
     Route::get('/admin/students', [AdminController::class, 'studentDashboard']);
     Route::post('/create-student', [AdminController::class, 'createStudent'])->name('createStudent');
+    Route::get('/get-student-details', [AdminController::class, 'getStudentDetails'])->name('getStudentDetails');
     Route::post('/update-student', [AdminController::class, 'updateStudent'])->name('updateStudent');
     Route::post('/delete-student', [AdminController::class, 'deleteStudent'])->name('deleteStudent');
-    
+    Route::post('/import-student', [AdminController::class, 'importStudent'])->name('importStudent');
+
 });
 
 Route::group(['middleware' => ['web', 'checkStudent']], function() {
