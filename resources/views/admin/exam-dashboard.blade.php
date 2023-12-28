@@ -63,11 +63,12 @@
                         <select name="subject_id" class="w-100" required>
                             <option value="">Select Subject</option>
                             @if (count($subjects) > 0)
-                                @foreach ($subjects as $subject )
+                                @foreach ($subjects as $subject)
                                     <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
                                 @endforeach
                             @endif
-                        </select> <br><br>
+                        </select>
+                        <br><br>
                         <input type="date" name="date" class="w-100" min="@php echo date('Y-m-d'); @endphp" required>
                         <br><br>
                         <input type="time" name="time" class="w-100" required>
@@ -101,11 +102,12 @@
                         <select name="subject_id" id="exam_subject_id" class="w-100" required>
                             <option value="">Select Subject</option>
                             @if (count($subjects) > 0)
-                                @foreach ($subjects as $subject )
+                                @foreach ($subjects as $subject)
                                     <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
                                 @endforeach
                             @endif
-                        </select> <br><br>
+                        </select>
+                        <br><br>
                         <input type="date" name="date" class="w-100" min="@php echo date('Y-m-d'); @endphp" id="exam_date" required>
                         <br><br>
                         <input type="time" name="time" class="w-100" id="exam_time" required>
@@ -147,7 +149,7 @@
     </div>
 
     <script>
-        jQuery(document).ready(function () {
+        $(document).ready(function () {
             $('#createExam').submit(function (e) {
                 e.preventDefault();
 

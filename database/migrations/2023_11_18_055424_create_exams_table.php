@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('exam_name');
             $table->integer('subject_id');
             $table->string('time');
+            $table->date('date');
             $table->timestamps();
         });
     }

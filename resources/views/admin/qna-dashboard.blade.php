@@ -427,7 +427,7 @@
                 });
             });
 
-            // import Qna 
+            // import Qna
             $('#importQna').submit(function (e) {
                 e.preventDefault();
 

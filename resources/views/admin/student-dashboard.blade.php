@@ -15,6 +15,7 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +25,11 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->email }}</td>
+                        <td>
+                            <button class="btn btn-info updateButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-toggle="modal" data-target="#updateStudentModal">Update</button>
+
+                            <button class="btn btn-danger deleteButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-toggle="modal" data-target="#deleteStudentModal">Delete</button>
+                        </td>
                     </tr>
                 @endforeach
             @else

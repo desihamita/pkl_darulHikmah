@@ -18,6 +18,7 @@ use Mail;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Imports\QnaImport;
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
@@ -61,7 +62,7 @@ class AdminController extends Controller
     public function examDashboard(){
         $subjects = Subject::all();
         $exams = Exam::with('subjects')->get();
-        return view('admin.exam-dashboard', ['subjects' => $subjects, 'exams' => $exams]);
+        return view('admin.exam-dashboard', compact('subjects', 'exams'));
     }
 
     public function createExam(Request $request){
@@ -118,8 +119,10 @@ class AdminController extends Controller
 
     // QnA
     public function qnaDashboard(){
-        $questions = Question::with('answers')->get();
-        return view('admin.qna-dashboard', compact('questions'));
+        $questions = Question::with('answers', 'subjects')->get();
+        $subject = Subject::all();
+        return view('admin.qna-dashboard', compact('questions', 'subject'));
+
     }
 
     public function createQna(Request $request){
@@ -230,7 +233,7 @@ class AdminController extends Controller
             User::insert([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($password);
+                'password' => Hash::make($password),
             ]);
 
             $url = URL::to('/');
