@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Subject extends Model
 {
     use HasFactory;
-    
     protected $fillable = [
-        'subjects'
+        'subjects',
     ];
 
     public function questions() {
-        return $this->belongsTo(Question::class);
+        return $this->hasMany(Question::class, 'subject_id', 'id');
     }
 }
