@@ -15,15 +15,13 @@ class QnaImport implements ToModel
     */
     public function model(array $row)
     {
-        \Log::info($row);
-
         if ($row[0] != 'question') {
             $questionId = Question::insertGetId([
                 'question' => $row[0],
-            ]); 
+            ]);
 
-            for ($i = 1; $i < count($row)-1; $i++) { 
-                if ($row[$i] != null) { 
+            for ($i = 1; $i < count($row)-1; $i++) {
+                if ($row[$i] != null) {
                     $is_correct = 0;
                     if ($row[7] == $row[$i]) {
                         $is_correct = 1;
@@ -36,8 +34,5 @@ class QnaImport implements ToModel
                 }
             }
         }
-    //     return new Question([
-    //         //
-    //     ]);
     }
 }

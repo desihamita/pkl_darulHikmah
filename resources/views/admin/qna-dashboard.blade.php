@@ -15,7 +15,6 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Subject</th>
             <th scope="col">Question</th>
             <th scope="col">Answer</th>
             <th scope="col">Action</th>
@@ -26,7 +25,6 @@
                 @foreach ($questions as $question)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $question->subjects->subject }}</td>
                         <td>{{ $question->question }}</td>
                         <td>
                             <a href="#" class="ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</a>
@@ -91,15 +89,6 @@
                 <form id="createQna">
                     @csrf
                     <div class="modal-body createModalAnswers">
-                        <select name="subject_id" class="w-100" required>
-                            <option value="">Select Subject</option>
-                            @if (count($subjects) > 0)
-                                @foreach ($subjects as $subject)
-                                    <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                        <br><br>
                         <div class="row answers">
                             <div class="col">
                                 <input type="text" class="w-100" name="question" placeholder="Enter Question" required>
@@ -133,15 +122,6 @@
                         <div class="row">
                             <div class="col">
                                 <input type="hidden" name="question_id" id="question_id">
-                                <select name="subject_id" id="subject_id" class="w-100" required>
-                                    <option value="">Select Subject</option>
-                                    @if (count($subjects) > 0)
-                                        @foreach ($subjects as $subject)
-                                            <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <br><br>
                                 <input type="text" class="w-100" name="question" id="question" placeholder="Enter Question" required>
                             </div>
                         </div>
