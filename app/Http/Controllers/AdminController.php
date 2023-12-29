@@ -315,5 +315,13 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
+    public function deleteExamQuestions(Request $request){
+        try {
+            QnaExam::where('id', $request->id)->delete();
+            return response()->json(['success' => true, 'msg' => 'Questions deleted successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
     
 }
