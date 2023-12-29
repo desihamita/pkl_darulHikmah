@@ -166,9 +166,9 @@
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="exam_id" id="addExamId">
-                        <input type="search" name="search" id="" class="w-100" placeholder="Search here">
+                        <input type="search" name="search" id="search" onkeyup="searchTable()" class="w-100" placeholder="Search here">
                         <br><br>
-                        <table class="table">
+                        <table class="table" id="questionsTable">
                             <thead>
                                 <th>Select</th>
                                 <th>Question</th>
@@ -335,5 +335,26 @@
                 });
             });
         });
+    </script>
+    <script>
+        function searchTable(){
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById('search');
+            filter = input.value.toUpperCase();
+            table = document.getElementById('questionsTable');
+            tr = table.getElementsByTagName("tr");
+
+            for(i=0; i < tr.length; i++){
+                td = tr[i].getElementsByTagName("td")[1];
+                if(td){
+                    txtValue = td.textContent || td.innerText;
+                    if(txtValue.toUpperCase().indexOf(filter) > -1){
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
     </script>
 @endsection
