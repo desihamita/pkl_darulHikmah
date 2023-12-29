@@ -17,8 +17,11 @@ class Question extends Model
         return $this->hasMany(Answer::class, 'question_id', 'id');
     }
 
-    public function subjects()
-    {
-        return $this->belongsTo(Subject::class, 'subject_id');
+    public function subjects(){
+        return $this->belongsTo(Subject::class, 'subject_id', 'id');
+    }
+
+    public function QnaExams(){
+        return $this->hasMany(QnaExam::class, 'question_id', 'id');
     }
 }

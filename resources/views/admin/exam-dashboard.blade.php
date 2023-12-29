@@ -19,6 +19,7 @@
             <th scope="col">Time</th>
             <th scope="col">Attempt</th>
             <th scope="col">Add Question</th>
+            <th scope="col">See Question</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -34,6 +35,9 @@
                         <td>{{ $exam->attempt }} </td>
                         <td>
                             <a href="" class="addQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModal">Add Question</a>
+                        </td>
+                        <td>
+                            <a href="" class="seeQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#seeQnaModal">See Question</a>
                         </td>
                         <td>
                             <button class="btn btn-info updateButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#updateExamModal">Update</button>
@@ -152,7 +156,7 @@
         </div>
     </div>
 
-    <!-- Create Answer Modal -->
+    <!-- Create question Modal -->
     <div class="modal fade" id="addQnaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -183,6 +187,34 @@
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create question Modal -->
+    <div class="modal fade" id="seeQnaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Soal Ujian</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <th>No</th>
+                                <th>Soal</th>
+                            </thead>
+                            <tbody class="seeQuestionTable">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
             </div>
         </div>
     </div>
@@ -334,6 +366,40 @@
                     }
                 });
             });
+
+            // see Questions
+            $('.seeQuestion').click(function(){
+                var id = $(this).attr('data-id');
+
+                $.ajax({
+                    url: "{{ route('getExamQuestions') }}",
+                    type: "GET",
+                    data: {exam_id: id},
+                    success:function(data) {
+                        console.log(data)
+                        var questions = data.data;
+                        var html = '';
+                        if (questions.length > 0) {
+                            for(let i=0; i<questions.length; i++){
+                                html +=`
+                                    <tr>
+                                        <td>`+(i+1)+`</td>
+                                        <td>`+questions[i]['question']['question']+`</td>
+                                    </tr>
+                                `;
+                            }
+                        } else {
+                            html +=`
+                                <tr>
+                                    <td colspan='2'>Questions not available</td>
+                                </tr>
+                            `;
+                        }
+                        $('.seeQuestionTable').html(html);
+                    }
+                })
+            });
+
         });
     </script>
     <script>

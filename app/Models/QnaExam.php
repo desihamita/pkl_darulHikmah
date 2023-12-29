@@ -11,7 +11,11 @@ class QnaExam extends Model
 
     public $table = "qna_exams";
     protected $fillable = [
-        'exam_id', 
+        'exam_id',
         'question_id'
-    ]; 
+    ];
+
+    public function question(){
+        return $this->belongsTo(Question::class, 'question_id', 'id');
+    }
 }

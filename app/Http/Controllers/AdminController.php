@@ -307,4 +307,13 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $ex->getMessage]);
         }
     }
+    public function getExamQuestions(Request $request){
+        try {
+            $data = QnaExam::where('exam_id', $request->exam_id)->with('question')->get();
+            return response()->json(['success' => true, 'msg' => 'Questions details!', 'data' => $data]);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+    
 }

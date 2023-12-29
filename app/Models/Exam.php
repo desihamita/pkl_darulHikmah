@@ -21,4 +21,8 @@ class Exam extends Model
     public function subjects(){
         return $this->belongsTo(Subject::class, 'subject_id', 'id');
     }
+    
+    public function QnaExams(){
+        return $this->hasMany(QnaExam::class, 'exam_id', 'id');
+    }
 }
