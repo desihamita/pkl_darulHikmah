@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('subject_id');
             $table->string('time');
             $table->date('date');
+            $table->string('token');
             $table->timestamps();
         });
     }

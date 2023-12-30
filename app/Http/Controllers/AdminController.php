@@ -68,6 +68,7 @@ class AdminController extends Controller
     public function createExam(Request $request){
         try {
             Exam::insert([
+                'token' => strtoupper(Str::random(8)),
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'time' => $request->time,
@@ -323,5 +324,5 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    
+
 }

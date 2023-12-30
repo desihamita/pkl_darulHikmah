@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,4 +78,9 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
 
 Route::group(['middleware' => ['web', 'checkStudent']], function() {
     Route::get('/dashboard', [AuthController::class, 'loadDashboard']);
+
+    Route::post('/check-token', [StudentController::class, 'checkToken'])->name('check.token');
+    Route::get('/student-ujian', [StudentController::class, 'studentUjian'])->name('studentUjian');
+
+
 });

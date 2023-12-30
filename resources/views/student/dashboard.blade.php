@@ -9,7 +9,8 @@
             <div class="card-header bg-primary"></div>
             <div class="card-body">
                 <h5 class="card-title">{{ $item->exam_name}}</h5>
-                <form>
+                <form method="post" action="{{ route('check.token') }}" >
+                    @csrf
                     <div class="card-text">
                         <div class="row">
                           <label class="col-sm-4 col-form-label">Mata Pelajaran </label>
@@ -35,11 +36,22 @@
                             <label class="col-form-label">:&nbsp; {{ $item->attempt}}</label>
                           </div>
                         </div>
+                        <div class="row">
+                          <label class="col-sm-4 col-form-label">Token</label>
+                          <div class="col-sm-8">
+                            :&nbsp;<input type="text" name="token" id="token">
+                          </div>
+                        </div>
                     </div>
-                    <div class="d-grid d-md-flex justify-content-md-end">
-                        <button class="btn btn-primary" type="button">Mulai</button>
+                    <div class="d-grid mt-3 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary" type="submit">Mulai</button>
                     </div>
                 </form>
+                <div id="notif">
+                    @if(session('message'))
+                        {{ session('message') }}
+                    @endif
+                </div>
             </div>
           </div>
         </div>
