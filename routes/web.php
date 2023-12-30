@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,9 +32,6 @@ Route::get('/', [AuthController::class, 'loadLogin']);
 Route::post('/login', [AuthController::class, 'userLogin'])->name('userLogin');
 
 Route::get('/logout', [AuthController::class, 'logout']);
-
-Route::get('/forget-password', [AuthController::class, 'forgetPasswordLoad']);
-Route::post('/forget-password', [AuthController::class, 'forgetPassword'])->name('forgetPassword');
 
 Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::get('/admin/dashboard', [AuthController::class, 'adminDashboard']);
@@ -79,8 +76,7 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
 Route::group(['middleware' => ['web', 'checkStudent']], function() {
     Route::get('/dashboard', [AuthController::class, 'loadDashboard']);
 
-    Route::post('/check-token', [StudentController::class, 'checkToken'])->name('check.token');
-    Route::get('/student-ujian', [StudentController::class, 'studentUjian'])->name('studentUjian');
-
+    Route::post('/check-token', [ExamController::class, 'checkToken'])->name('check.token');
+    Route::get('/exam/{id}', [ExamController::class, 'loadExamDashboard'])->name('loadExamDashboard');
 
 });

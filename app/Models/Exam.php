@@ -22,7 +22,8 @@ class Exam extends Model
         return $this->belongsTo(Subject::class, 'subject_id', 'id');
     }
     
-    public function QnaExams(){
+    public function qnaExams(){
         return $this->hasMany(QnaExam::class, 'exam_id', 'id');
     }
+    
 }
