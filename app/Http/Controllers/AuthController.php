@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\PasswordReset;
 use App\Models\Subject;
+use App\Models\Exam;
 use Mail;
 
 class AuthController extends Controller
@@ -72,7 +73,8 @@ class AuthController extends Controller
     }
 
     public function loadDashboard(){
-        return view('student.dashboard');
+        $exams = Exam::with('subjects')->orderBy('date')->get();
+        return view('student.dashboard', compact('exams'));
     }
 
     public function adminDashboard(){
