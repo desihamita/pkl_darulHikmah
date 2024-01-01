@@ -8,10 +8,11 @@
           <div class="card">
             <div class="card-header bg-primary"></div>
             <div class="card-body">
-                <h5 class="card-title">{{ $item->exam_name}}</h5>
+                <h5 class="card-title">{{ $item->exam_name }}</h5>
                 <form method="post" action="{{ route('check.token') }}" >
                     @csrf
                     <div class="card-text">
+                        <label style="display:none;">{{ $item->id }}</label>
                         <div class="row">
                           <label class="col-sm-4 col-form-label">Mata Pelajaran </label>
                           <div class="col-sm-8">
@@ -36,6 +37,12 @@
                             <label class="col-form-label">:&nbsp; {{ $item->attempt}}</label>
                           </div>
                         </div>
+                        <div class="row">
+                            <label class="col-sm-4 col-form-label">Available Attempt</label>
+                            <div class="col-sm-8">
+                                <label class="col-form-label">:&nbsp; {{ $item->attempt_counter }}</label>
+                            </div>
+                        </div>                        
                         <div class="row">
                           <label class="col-sm-4 col-form-label">Token</label>
                           <div class="col-sm-8">

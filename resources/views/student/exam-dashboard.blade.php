@@ -54,7 +54,7 @@
             var time = @json($time);
             $('.time').text(time[0]+':'+time[1]+':00 Left Time');
 
-            var seconds = 60;
+            var seconds = 1;
             var hours = parseInt(time[0]);
             var minutes = parseInt(time[1]);
 
@@ -66,7 +66,7 @@
                 console.log(hours+" -:- "+minutes+" -:- "+seconds)
                 if (seconds <= 0) {
                     minutes--;
-                    seconds = 60;
+                    seconds = 3;
                 }
                 if (minutes <= 0 && hours != 0) {
                     hours--;

@@ -25,9 +25,14 @@ class ExamController extends Controller
     }
 
     public function loadExamDashboard($id){
-        $qnaExam = Exam::where('token', $id)->with('qnaExams')->inRandomOrder()->get();
+        $qnaExam = Exam::where('token', $id)->with('qnaExams')->get();
         if (count($qnaExam) > 0) {
-            if ($qnaExam[0]['date'] == date('Y-m-d')) {
+            
+            $attemptCount = ExamAttempt::where(['exam_id'=> $qnaExam[0]['id'], 'user_id' => auth()->user()->id])->count();
+
+            if ($attemptCount >= $qnaExam[0]['attempt']) {
+                return view('student.exam-dashboard', ['success' => false, 'msg' => 'Your exam attempt has been completed', 'exam' => $qnaExam]);
+            } else if ($qnaExam[0]['date'] == date('Y-m-d')) {
                 if (count($qnaExam[0]['qnaExams']) > 0) {
                     $qna = QnaExam::where('exam_id', $qnaExam[0]['id'])->with('question', 'answers')->get();
 
