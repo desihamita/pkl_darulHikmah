@@ -79,4 +79,6 @@ Route::group(['middleware' => ['web', 'checkStudent']], function() {
     Route::post('/check-token', [ExamController::class, 'checkToken'])->name('check.token');
     Route::get('/exam/{id}', [ExamController::class, 'loadExamDashboard'])->name('loadExamDashboard');
 
+    Route::post('/exam-submit', [ExamController::class, 'examSubmit'])->name('examSubmit');
+
 });
