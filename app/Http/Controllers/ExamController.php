@@ -48,7 +48,6 @@ class ExamController extends Controller
     }
 
     public function examSubmit(Request $request){
-        // dd($request->all());
         $attempt_id = ExamAttempt::insertGetId([
             'exam_id' => $request->exam_id,
             'user_id' => Auth::user()->id
