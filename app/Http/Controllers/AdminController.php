@@ -330,4 +330,14 @@ class AdminController extends Controller
         $exams = Exam::with('qnaExams')->get();
         return view('admin.marks-dashboard', compact('exams'));
     }
+    public function updateMarks(Request $request){
+        try {
+            Exam::where('id', $request->exam_id)->update([
+                'marks' => $request->marks
+            ]);
+            return response()->json(['success' => true, 'msg' => 'Marks updated successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
 }
