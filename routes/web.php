@@ -71,9 +71,12 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::get('/get-exam-questions', [AdminController::class, 'getExamQuestions'])->name('getExamQuestions');
     Route::get('/delete-exam-questions', [AdminController::class, 'deleteExamQuestions'])->name('deleteExamQuestions');
 
-    // marks routing
+    // Marks routing
     Route::get('/admin/marks', [AdminController::class, 'loadMarks']);
     Route::post('/update-marks', [AdminController::class, 'updateMarks'])->name('updateMarks');
+
+    // Exams routing
+    Route::get('/admin/review-exams', [AdminController::class, 'reviewExams'])->name('reviewExams');
 
 });
 

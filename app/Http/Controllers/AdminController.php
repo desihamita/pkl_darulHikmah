@@ -6,21 +6,18 @@ use Illuminate\Http\Request;
 
 use App\Models\Subject;
 use App\Models\Exam;
-
 // user
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
-
+use App\Imports\QnaImport;
+use App\Imports\UserImport;
 // qna
 use App\Models\Question;
 use App\Models\Answer;
-use App\Imports\QnaImport;
-
-use App\Imports\UserImport;
-
 use App\Models\QnaExam;
+use App\Models\ExamAttempt;
 
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -339,5 +336,11 @@ class AdminController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
+    }
+
+    // reviewsExams
+    public function reviewExams(){
+        $attemps = ExamAttempt::with(['user', 'exam'])->orderBy('id')->get();
+        return view('admin.review-exams', compact('attemps'));
     }
 }
