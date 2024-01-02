@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('time');
             $table->date('date');
             $table->string('token');
+            $table->float('marks');
             $table->timestamps();
         });
     }
