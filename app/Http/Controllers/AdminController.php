@@ -18,6 +18,7 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\QnaExam;
 use App\Models\ExamAttempt;
+use App\Models\ExamAnswer;
 
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -343,4 +344,13 @@ class AdminController extends Controller
         $attemps = ExamAttempt::with(['user', 'exam'])->orderBy('id')->get();
         return view('admin.review-exams', compact('attemps'));
     }
+    public function reviewQna(Request $request){
+        try {
+            $attempData = ExamAnswer::where('attempt_id', $request->attempt_id)->with(['question', 'answer'])->get();
+            return response()->json(['success' => true, 'msg' => $attempData]);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
 }

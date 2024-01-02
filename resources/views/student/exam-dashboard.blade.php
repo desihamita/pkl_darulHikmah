@@ -66,7 +66,7 @@
                 console.log(hours+" -:- "+minutes+" -:- "+seconds)
                 if (seconds <= 0) {
                     minutes--;
-                    seconds = 3;
+                    seconds = 20;
                 }
                 if (minutes <= 0 && hours != 0) {
                     hours--;
