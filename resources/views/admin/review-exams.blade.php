@@ -76,45 +76,85 @@
                     url: "{{ route('reviewQna') }}",
                     type: "GET",
                     data: {attempt_id: id},
-                    success: function(response){
+                    success: function(data){
                         var html = '';
-                        if (response.success == true) {
-                            var responseData = response.msg;
-                            if(Array.isArray(responseData) && responseData.length > 0){
-                                for(let i=0; i<responseData.length; i++){
-                                    let isCorrect = `<span style="color:red;" class="fa fa-close"></span>`;
+                        if (data.success == true) {
+                            var responseData = data.msg; 
+                            if (responseData.length > 0) {
+                                for (let i = 0; i < responseData.length; i++) {
+                                    let is_correct = `<span class="fa fa-close" style="color:red;"></span>`;
 
-                                    if (responseData[i]['answer']['answer'] == 1) {
-                                        isCorrect = `<span style="color:green;" class="fa fa-check"></span>`;
+                                    if (responseData[i]['answer']['is_correct'] == 1) {
+                                        is_correct = `<span class="fa fa-check" style="color:green;"></span>`;
                                     }
 
                                     let answer = responseData[i]['answer']['answer'];
+
                                     html += `
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <h6>Q(`+(i+1)+`). `+responseData[i]['question']['question']+`</h6>
-                                                <p>Ans: `+answer+` `+isCorrect+`</p>
+                                                <h6>Q(${i+1}). ${responseData[i]['question']['question']}</h6>
+                                                <p>Ans: ${answer} ${is_correct}</p>
                                             </div>
-                                        </div>
-                                    `;
+                                        </div>`;
                                 }
                             } else {
                                 html += `
-                                        <h6>Siswa belum menjawab pertanyaan apapun!</h6>` +
-                                        `<p>Jika Anda menyetujui ujian ini, siswa akan gagal!</p>
-                                `;
+                                    <h6>Siswa belum menjawab pertanyaan apapun!</h6>
+                                    <p>Jika Anda menyetujui ujian ini, siswa akan gagal!</p>`;
                             }
-                        } else {
-                            html += '<p>Having some server issue!</p>';
+                            $('.review-exam').html(html);
                         }
-                        $('.review-exam').html(html);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText); // Log pesan kesalahan detail
                     }
                 });
+
+
+                // $.ajax({
+                //     url: "{{ route('reviewQna') }}",
+                //     type: "GET",
+                //     data: {attempt_id: id},
+                //     success: function(data){
+                //         var html = '';
+                //         if (data.success === true ) {
+                //             console.log(data.data)
+                //             var data = data.data;
+                //             if(data.length > 0){
+                //                 for(let i=0; i<data.length; i++){
+                //                     console.log(data)
+                //                     console.log('Nilai data[i][\'answer\'][\'answer\']:', data[i]['answer']['answer']);
+
+                //                     let is_correct = `<span class="fa fa-close" style="color:red;"></span>`;
+
+                //                     if (data[i]['answer']['answer'] === 1 || data[i]['answer']['answer'] === '1') {
+                //                         is_correct = `<span class="fa fa-check" style="color:green;"></span>`;
+                //                     }
+
+                //                     let answer = data[i]['answer']['answer'];
+                //                     html += `
+                //                         <div class="row">
+                //                             <div class="col-sm-12">
+                //                                 <h6>Q(`+(i+1)+`). `+data[i]['question']['question']+`</h6>
+                //                                 <p>Ans: `+answer+` `+is_correct+`</p>
+                //                             </div>
+                //                         </div>
+                //                     `;
+                //                 }
+                //             } else {
+                //                 html += `
+                //                         <h6>Siswa belum menjawab pertanyaan apapun!</h6>` +
+                //                         `<p>Jika Anda menyetujui ujian ini, siswa akan gagal!</p>
+                //                 `;
+                //             }
+                //         } else {
+                //             html += '<p>Having some server issue!</p>';
+                //         }
+                //         $('.review-exam').html(html);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         console.error(xhr.responseText);
+                //     }
+                // });
             });
         });
-
     </script>
 @endsection
