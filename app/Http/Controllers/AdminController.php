@@ -352,5 +352,33 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
+    public function approvedQna(Request $request){
+        try {
+            $attemptId = $request->attempt_id;
 
+            $examData = ExamAttempt::where('id', $attemptId)->with('exam')->get();
+            $marks = $examData[0]['exam']['marks'];
+
+            $attempData = ExamAnswer::where('attempt_id', $attemptId)->with('answer')->get();
+
+            $totalMarks = 0;
+
+            if (count($attempData) > 0) {
+                foreach ($attempData as $attempt) {
+                    if($attempt->answer->is_correct == 1){
+                        $totalMarks += $marks;
+                    }
+                }
+            }
+
+            ExamAttempt::where('id', $attemptId)->update([
+                'status' => 1,
+                'marks' => $totalMarks
+            ]);
+
+            return response()->json(['success' => true, 'msg' => 'Approved Successfully!', 'data' => $attempData]);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
 }

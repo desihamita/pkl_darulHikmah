@@ -14,21 +14,21 @@
         </thead>
         <tbody>
             @if (count($attemps) > 0)
-                @foreach ($attemps as $item)
+                @foreach ($attemps as $attempt)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->user->name }}</td>
-                        <td>{{ $item->exam->exam_name }}</td>
+                        <td>{{ $attempt->user->name }}</td>
+                        <td>{{ $attempt->exam->exam_name }}</td>
                         <td>
-                            @if ($item->status == 0)
+                            @if ($attempt->status == 0)
                                 <span style="color:red">Pending</span>
                             @else
                                 <span style="color: green">Approved</span>
                             @endif
                         </td>
                         <td>
-                            @if ($item->status == 0)
-                                <a href="" data-id="{{ $item->id }}" data-toggle="modal" data-target="#reviewExamModal" class="reviewExam" >Review & Approved</a>
+                            @if ($attempt->status == 0)
+                                <a href="" data-id="{{ $attempt->id }}" data-toggle="modal" data-target="#reviewExamModal" class="reviewExam" >Review & Approved</a>
                             @else
                                 Completed
                             @endif
@@ -55,6 +55,7 @@
                 </div>
                 <form id="reviewForm">
                     @csrf
+                    <input type="hidden" name="attempt_id" id="attempt_id">
                     <div class="modal-body review-exam">
                         loading...
                     </div>
@@ -71,6 +72,7 @@
         $(document).ready(function(){
             $('.reviewExam').click(function(){
                 var id = $(this).attr('data-id');
+                $('#attempt_id').val(id);
 
                 $.ajax({
                     url: "{{ route('reviewQna') }}",
@@ -79,82 +81,57 @@
                     success: function(data){
                         var html = '';
                         if (data.success == true) {
-                            var responseData = data.msg; 
-                            if (responseData.length > 0) {
-                                for (let i = 0; i < responseData.length; i++) {
+                            var data = data.msg;
+                            if (data.length > 0) {
+                                for (let i = 0; i < data.length; i++) {
                                     let is_correct = `<span class="fa fa-close" style="color:red;"></span>`;
 
-                                    if (responseData[i]['answer']['is_correct'] == 1) {
+                                    if (data[i]['answer']['is_correct'] == 1) {
                                         is_correct = `<span class="fa fa-check" style="color:green;"></span>`;
                                     }
 
-                                    let answer = responseData[i]['answer']['answer'];
-
+                                    let answer = data[i]['answer']['answer'];
                                     html += `
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <h6>Q(${i+1}). ${responseData[i]['question']['question']}</h6>
+                                                <h6>Q(${i+1}). ${data[i]['question']['question']}</h6>
                                                 <p>Ans: ${answer} ${is_correct}</p>
                                             </div>
-                                        </div>`;
+                                        </div>
+                                    `;
                                 }
                             } else {
                                 html += `
                                     <h6>Siswa belum menjawab pertanyaan apapun!</h6>
-                                    <p>Jika Anda menyetujui ujian ini, siswa akan gagal!</p>`;
+                                    <p>Jika Anda menyetujui ujian ini, siswa akan gagal!</p>
+                                `;
                             }
-                            $('.review-exam').html(html);
+                        $('.review-exam').html(html);
                         }
                     }
                 });
-
-
-                // $.ajax({
-                //     url: "{{ route('reviewQna') }}",
-                //     type: "GET",
-                //     data: {attempt_id: id},
-                //     success: function(data){
-                //         var html = '';
-                //         if (data.success === true ) {
-                //             console.log(data.data)
-                //             var data = data.data;
-                //             if(data.length > 0){
-                //                 for(let i=0; i<data.length; i++){
-                //                     console.log(data)
-                //                     console.log('Nilai data[i][\'answer\'][\'answer\']:', data[i]['answer']['answer']);
-
-                //                     let is_correct = `<span class="fa fa-close" style="color:red;"></span>`;
-
-                //                     if (data[i]['answer']['answer'] === 1 || data[i]['answer']['answer'] === '1') {
-                //                         is_correct = `<span class="fa fa-check" style="color:green;"></span>`;
-                //                     }
-
-                //                     let answer = data[i]['answer']['answer'];
-                //                     html += `
-                //                         <div class="row">
-                //                             <div class="col-sm-12">
-                //                                 <h6>Q(`+(i+1)+`). `+data[i]['question']['question']+`</h6>
-                //                                 <p>Ans: `+answer+` `+is_correct+`</p>
-                //                             </div>
-                //                         </div>
-                //                     `;
-                //                 }
-                //             } else {
-                //                 html += `
-                //                         <h6>Siswa belum menjawab pertanyaan apapun!</h6>` +
-                //                         `<p>Jika Anda menyetujui ujian ini, siswa akan gagal!</p>
-                //                 `;
-                //             }
-                //         } else {
-                //             html += '<p>Having some server issue!</p>';
-                //         }
-                //         $('.review-exam').html(html);
-                //     },
-                //     error: function(xhr, status, error) {
-                //         console.error(xhr.responseText);
-                //     }
-                // });
             });
+
+            $('#reviewForm').submit(function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: "{{ route('approvedQna') }}",
+                    type: "POST",
+                    data: formData,
+                    success: function (data) {
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+
+
         });
     </script>
 @endsection

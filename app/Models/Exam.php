@@ -16,7 +16,9 @@ class Exam extends Model
         'subject_id',
         'time',
         'date',
-        'attempt'
+        'attempt',
+        'token',
+        'marks'
     ];
     protected $appends = ['attempt_counter'];
     public $count = '';
