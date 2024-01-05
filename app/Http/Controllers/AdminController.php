@@ -121,8 +121,14 @@ class AdminController extends Controller
     }
     public function createQna(Request $request){
         try {
+            $explanation = null;
+
+            if (isset($request->explanation)) {
+                $explanation = $request->explanation;
+            }
             $questionId = Question::insertGetId([
-                'question' => $request->question
+                'question' => $request->question,
+                'explanation' => $explanation
             ]);
 
             foreach ($request->answers as $answer) {
@@ -153,8 +159,15 @@ class AdminController extends Controller
     }
     public function updateQna(Request $request){
         try {
+            $explanation = null;
+
+            if (isset($request->explanation)) {
+                $explanation = $request->explanation;
+            }
+
             Question::where('id', $request->question_id)->update([
-                'question' => $request->question
+                'question' => $request->question,
+                'explanation' => $explanation
             ]);
 
             if (isset($request->answers)) {

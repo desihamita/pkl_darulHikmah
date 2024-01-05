@@ -10,6 +10,7 @@ class Question extends Model
     use HasFactory;
     protected $fillable = [
         'question',
+        'explanation',
         'subject_id'
     ];
 

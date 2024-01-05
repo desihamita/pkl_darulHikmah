@@ -89,9 +89,14 @@
                 <form id="createQna">
                     @csrf
                     <div class="modal-body createModalAnswers">
-                        <div class="row answers">
+                        <div class="row">
                             <div class="col">
                                 <input type="text" class="w-100" name="question" placeholder="Enter Question" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <textarea name="explanation" class="w-100" placeholder="Enter your explanation (Optional)"></textarea>
                             </div>
                         </div>
                     </div>
@@ -123,6 +128,11 @@
                             <div class="col">
                                 <input type="hidden" name="question_id" id="question_id">
                                 <input type="text" class="w-100" name="question" id="question" placeholder="Enter Question" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <textarea name="explanation" id="explanation" class="w-100" placeholder="Enter your explanation (Optional)"></textarea>
                             </div>
                         </div>
                     </div>
@@ -322,6 +332,7 @@
                         $("#question_id").val(qna['id']);
                         $("#question").val(qna['question']);
                         $("#subject_id").val(qna['subject_id']);
+                        $("#explanation").val(qna['explanation']);
                         $(".editAnswers").remove();
 
                         var html = '';
