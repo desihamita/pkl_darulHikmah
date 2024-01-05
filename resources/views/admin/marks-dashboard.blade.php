@@ -11,6 +11,7 @@
             <th scope="col">Exam Name</th>
             <th scope="col">Marks</th>
             <th scope="col">Total Marks</th>
+            <th scope="col">Passing Marks</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -22,6 +23,7 @@
                         <td>{{ $item->exam_name }}</td>
                         <td>{{ $item->marks }}</td>
                         <td>{{ count($item->qnaExams) * $item->marks }}</td>
+                        <td>{{ $item->pass_marks }}</td>
                         <td>
                             <button class="btn btn-info editMarks" data-id="{{$item->id}}" data-marks="{{ $item->marks }}" data-totalq="{{count($item->qnaExams)}}" data-toggle="modal" data-target="#updateMarksModal">Edit</button>
                         </td>
@@ -49,20 +51,29 @@
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <label for="marksInput">Marks/Q</label>
                             </div>
                             <div class="col-sm-6">
                                 <input type="hidden" name="exam_id" id="exam_id">
-                                <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46" name="marks" id="marksInput" placeholder="Enter Mark/Q" required>
+                                <input type="number" step="0.01" name="marks" id="marks" placeholder="Enter Mark/Q" required>
+
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <label for="tmarksInput">Total Marks</label>
+                        <div class="row mt-2">
+                            <div class="col-sm-4">
+                                <label for="tmarks">Total Marks</label>
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" placeholder="Total Marks" name="tmarks" id="tmarksInput" disabled>
+                                <input type="text" placeholder="Total Marks" name="tmarks" id="tmarks" disabled>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-4">
+                                <label for="pmarks">Passing Marks</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" step="0.01" placeholder="Total Passing Marks" name="pass_marks" id="pass_marks" required>
                             </div>
                         </div>
                     </div>
@@ -85,18 +96,47 @@
                 var totalq = $(this).data('totalq');
 
                 $('#exam_id').val(exam_id);
-                $('#marksInput').val(marks);
-                $('#tmarksInput').val(marks * totalq);
+                $('#marks').val(marks);
+                $('#tmarks').val(marks * totalq);
 
                 totalQna = totalq;
+
+                $('#pass_marks').val($(this).attr('data-pass-marks'))
             });
 
-            $('#marksInput').keyup(function () {
-                $('#tmarksInput').val(($(this).val() * totalQna).toFixed(1));
+            $('#marks').keyup(function () {
+                $('#tmarks').val(($(this).val() * totalQna).toFixed(1));
+            });
+
+            $('#pass_marks').keyup(function(){
+                $('.pass-error').remove();
+
+                var tmarks = $('#tmarks').val();
+                var pmarks = $(this).val();
+
+                if (parseFloat(pmarks) >= parseFloat(tmarks)) {
+                    $(this).parent().append('<p style="color:red;" class="pass-error">Passing Marks will be less than total marks!</p>');
+                    setTimeout(() => {
+                        $('.pass-error').remove();
+                    }, 2000);
+                }
             });
 
             $('#editMarks').submit(function (event) {
                 event.preventDefault();
+
+                $('.pass-error').remove();
+                var tmarks = $('#tmarks').val();
+                var pmarks = $('#pass_marks').val();
+
+                if (parseFloat(pmarks) >= parseFloat(tmarks)) {
+                    $('#pass_marks').parent().append('<p style="color:red;" class="pass-error">Passing Marks will be less than total marks!</p>');
+                    setTimeout(() => {
+                        $('.pass-error').remove();
+                    }, 2000);
+
+                    return false;
+                }
 
                 var formData = $(this).serialize();
 
