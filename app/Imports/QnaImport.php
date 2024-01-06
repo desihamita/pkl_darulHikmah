@@ -4,34 +4,50 @@ namespace App\Imports;
 
 use App\Models\Question;
 use App\Models\Answer;
-use Maatwebsite\Excel\Concerns\ToModel;
+use App\Models\Subject;
 
-class QnaImport implements ToModel
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+
+class QnaImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function model(array $row)
-    {
-        if ($row[0] != 'question') {
-            $questionId = Question::insertGetId([
-                'question' => $row[0],
-            ]);
+    public function model(array $row) {
+        if ($row['question'] != 'question') {
+            info('Processing question: ' . $row['question']);
 
-            for ($i = 1; $i < count($row)-1; $i++) {
-                if ($row[$i] != null) {
-                    $is_correct = 0;
-                    if ($row[7] == $row[$i]) {
-                        $is_correct = 1;
+            $subject = Subject::where('subject', $row['subject'])->first();
+
+            if ($subject != null) {
+                $questionId = Question::insertGetId([
+                    'question' => $row['question'],
+                    'subject_id' => $subject->id,
+                    'explanation' => $row['explanation'],
+                ]);
+
+                for ($i = 1; $i <= 6; $i++) {
+                    $optionKey = 'option_' . $i;
+
+                    if (isset($row[$optionKey]) && $row[$optionKey] !== null) {
+                        $is_correct = 0;
+
+                        if ($row['is_correct'] == $row[$optionKey]) {
+                            $is_correct = 1;
+                        }
+
+                        Answer::insert([
+                            'question_id' => $questionId,
+                            'answer' => $row[$optionKey],
+                            'is_correct' => $is_correct,
+                        ]);
                     }
-                    Answer::insert([
-                        'question_id' => $questionId,
-                        'answer' => $row[$i],
-                        'is_correct' => $is_correct
-                    ]);
                 }
+            } else {
+                info('Mata pelajaran tidak ditemukan untuk: ' . $row['subject']);
             }
         }
     }

@@ -9,7 +9,7 @@ class Subject extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'subjects',
+        'subject',
     ];
 
     public function questions() {

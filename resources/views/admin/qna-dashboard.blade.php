@@ -15,8 +15,9 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Question</th>
-            <th scope="col">Answer</th>
+            <th scope="col">Mata Pelajaran</th>
+            <th scope="col">Pertanyaan</th>
+            <th scope="col">Jawaban</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -25,6 +26,13 @@
                 @foreach ($questions as $question)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td>{{ $question->subjects->subject }}
+                            {{-- @if ($question->subjects)
+                                {{ $question->subjects->subject }}
+                            @else
+                                N/A
+                            @endif --}}
+                        </td>
                         <td>{{ $question->question }}</td>
                         <td>
                             <a href="#" class="ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</a>
@@ -96,6 +104,18 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col">
+                                <select name="subject_id" class="w-100" required>
+                                    <option value="">Select Subject</option>
+                                    @if (count($subjects) > 0)
+                                        @foreach ($subjects as $subject)
+                                            <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
                                 <textarea name="explanation" class="w-100" placeholder="Enter your explanation (Optional)"></textarea>
                             </div>
                         </div>
@@ -128,6 +148,18 @@
                             <div class="col">
                                 <input type="hidden" name="question_id" id="question_id">
                                 <input type="text" class="w-100" name="question" id="question" placeholder="Enter Question" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <select name="subject_id" id="subject_id" class="w-100" required>
+                                    <option value="">Select Subject</option>
+                                    @if (count($subjects) > 0)
+                                        @foreach ($subjects as $subject)
+                                            <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         <div class="row mt-2">

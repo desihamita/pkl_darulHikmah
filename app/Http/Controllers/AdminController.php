@@ -115,8 +115,9 @@ class AdminController extends Controller
 
     // QnA
     public function qnaDashboard(){
-        $questions = Question::with('answers')->get();
-        return view('admin.qna-dashboard', compact('questions'));
+        $subjects = Subject::all();
+        $questions = Question::with('answers', 'subjects')->get();
+        return view('admin.qna-dashboard', compact('questions', 'subjects'));
 
     }
     public function createQna(Request $request){
@@ -126,7 +127,9 @@ class AdminController extends Controller
             if (isset($request->explanation)) {
                 $explanation = $request->explanation;
             }
+
             $questionId = Question::insertGetId([
+                'subject_id' => $request->subject_id,
                 'question' => $request->question,
                 'explanation' => $explanation
             ]);
@@ -166,8 +169,10 @@ class AdminController extends Controller
             }
 
             Question::where('id', $request->question_id)->update([
+                'subject_id' => $request->subject_id,
                 'question' => $request->question,
-                'explanation' => $explanation
+                'explanation' => $explanation,
+
             ]);
 
             if (isset($request->answers)) {
