@@ -35,9 +35,6 @@ class AdminController extends Controller
         $subjects = $subjects->get();
 
         return view('admin.subject-dashboard', compact('subjects', 'request'));
-
-        // $subjects = Subject::all();
-        // return view('admin.subject-dashboard', compact('subjects'));
     }
     public function createSubject(Request $request){
         try {
@@ -243,9 +240,17 @@ class AdminController extends Controller
     }
 
     // students
-    public function studentDashboard(){
-        $students = User::where('is_admin', 0)->get();
-        return view('admin.student-dashboard', compact('students'));
+    public function studentDashboard(Request $request){
+        $students = User::query();
+
+        if ($request->get('search')) {
+            $students = $students->where('name', 'ILIKE', '%' . $request->get('search') . '%')
+            ->orWhere('nis', 'ILIKE', '%' . $request->get('search') . '%')
+            ->orWhere('email', 'ILIKE', '%' . $request->get('search') . '%');
+        }
+
+        $students = $students->where('is_admin', 0)->get();
+        return view('admin.student-dashboard', compact('students', 'request'));
     }
     public function createStudent(Request $request){
         try {
