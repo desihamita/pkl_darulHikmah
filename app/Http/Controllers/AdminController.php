@@ -25,6 +25,20 @@ use Maatwebsite\Excel\Facades\Excel;
 class AdminController extends Controller
 {
     // Subject
+    public function subjectDashboard(Request $request){
+        $subjects = Subject::query();
+
+        if ($request->get('search')) {
+            $subjects = $subjects->where('subject', 'ILIKE', '%' . $request->get('search') . '%');
+        }
+
+        $subjects = $subjects->get();
+
+        return view('admin.subject-dashboard', compact('subjects', 'request'));
+
+        // $subjects = Subject::all();
+        // return view('admin.subject-dashboard', compact('subjects'));
+    }
     public function createSubject(Request $request){
         try {
             Subject::insert([

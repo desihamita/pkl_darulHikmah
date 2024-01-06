@@ -37,6 +37,7 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::get('/admin/dashboard', [AuthController::class, 'adminDashboard']);
 
     //subject route
+    Route::get('/admin/subject', [AdminController::class, 'subjectDashboard'])->name('subjectDashboard');
     Route::post('/create-subject', [AdminController::class, 'createSubject'])->name('createSubject');
     Route::post('/update-subject', [AdminController::class, 'updateSubject'])->name('updateSubject');
     Route::post('/delete-subject', [AdminController::class, 'deleteSubject'])->name('deleteSubject');
