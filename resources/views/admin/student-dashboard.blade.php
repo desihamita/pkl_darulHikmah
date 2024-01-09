@@ -328,5 +328,5 @@
             });
         });
     });
-</script>v
+</script>
 @endsection

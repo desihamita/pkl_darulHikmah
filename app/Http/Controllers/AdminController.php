@@ -139,9 +139,22 @@ class AdminController extends Controller
 
     // QnA
     public function qnaDashboard(Request $request){
+        $questions = Question::query();
         $subjects = Subject::all();
-        $questions = Question::with('answers', 'subjects')->get();
-        return view('admin.qna-dashboard', compact('questions', 'subjects'));
+
+        if ($request->get('search')) {
+            $searchTerm = $request->get('search');
+            $questions->where(function ($query) use ($searchTerm) {
+                $query->where('question', 'ILIKE', '%' . $searchTerm . '%')
+                    ->orWhereHas('subjects', function ($query) use ($searchTerm) {
+                        $query->where('subject', 'ILIKE', '%' . $searchTerm . '%');
+                    });
+            });
+        }
+
+        $questions = $questions->with('answers', 'subjects')->get();
+
+        return view('admin.qna-dashboard', compact('questions', 'subjects', 'request'));
 
     }
     public function createQna(Request $request){
