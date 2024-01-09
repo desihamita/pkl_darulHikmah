@@ -49,7 +49,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="../charts/uplot.html" class="nav-link">
+                <a href="/admin/exam" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ujian</p>
                 </a>
@@ -62,9 +62,12 @@
             </li>
             <li class="nav-item">
                 <a href="../examples/profile.html" class="nav-link">
-                    <i class="far fa-gear nav-icon"></i>
+                    <i class="far fa-circle nav-icon"></i>
                   <p>Pengaturan</p>
                 </a>
+            </li>
+            <li>
+              <a href="/logout"><span class="fa fa-sign-out mr-3"></span>Logout</a>
             </li>
         </ul>
       </nav>

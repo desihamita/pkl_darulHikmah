@@ -69,10 +69,23 @@ class AdminController extends Controller
     }
 
     //Exam
-    public function examDashboard(){
+    public function examDashboard(Request $request){
+        $exams = Exam::query();
         $subjects = Subject::all();
-        $exams = Exam::with('subjects')->get();
-        return view('admin.exam-dashboard', compact('subjects', 'exams'));
+
+        if ($request->get('search')) {
+            $searchTerm = $request->get('search');
+            $exams->where(function ($query) use ($searchTerm) {
+                $query->where('exam_name', 'ILIKE', '%' . $searchTerm . '%')
+                    ->orWhereHas('subjects', function ($query) use ($searchTerm) {
+                        $query->where('subject', 'ILIKE', '%' . $searchTerm . '%');
+                    });
+            });
+        }
+
+        $exams = $exams->with('subjects')->get();
+
+        return view('admin.exam-dashboard', compact('subjects', 'exams', 'request'));
     }
     public function createExam(Request $request){
         try {
@@ -125,7 +138,7 @@ class AdminController extends Controller
     }
 
     // QnA
-    public function qnaDashboard(){
+    public function qnaDashboard(Request $request){
         $subjects = Subject::all();
         $questions = Question::with('answers', 'subjects')->get();
         return view('admin.qna-dashboard', compact('questions', 'subjects'));
@@ -317,6 +330,7 @@ class AdminController extends Controller
                     if (count($qnaExam) == 0) {
                         $data[$counter]['id'] = $question->id;
                         $data[$counter]['questions'] = $question->question;
+                        $data[$counter]['subjects'] = $question->subject_id;
                         $counter++;
                     }
                 }
