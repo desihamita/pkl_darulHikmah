@@ -405,9 +405,9 @@ class AdminController extends Controller
     }
 
     // reviewsExams
-    public function reviewExams(){
-        $attemps = ExamAttempt::with(['user', 'exam'])->orderBy('id')->get();
-        return view('admin.review-exams', compact('attemps'));
+    public function reviewExams(Request $request){
+        $attemps = ExamAttempt::with('user', 'exam')->orderBy('id')->get();
+        return view('admin.review-exams', compact('attemps', 'request'));
     }
     public function reviewQna(Request $request){
         try {
