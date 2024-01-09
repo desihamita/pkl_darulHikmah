@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Subject;
+use App\Models\Kelas;
 use App\Models\Exam;
 // user
 use App\Models\User;
@@ -63,6 +64,52 @@ class AdminController extends Controller
             Subject::where('id', $request->id)->delete();
 
             return response()->json(['success' => true, 'msg' => 'Subject deleted Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    // Class
+    public function classDashboard(Request $request){
+        $kelas = Kelas::query();
+
+        if ($request->get('search')) {
+            $kelas = $kelas->where('class', 'ILIKE', '%' . $request->get('search') . '%');
+        }
+
+        $kelas = $kelas->get();
+
+        return view('admin.kelas-dashboard', compact('kelas', 'request'));
+    }
+    public function createClass(Request $request){
+        try {
+            Kelas::insert([
+                'class' => $request->kelas,
+                'semester' => $request->semester
+            ]);
+
+            return response()->json(['success' => true, 'msg' => 'Class added Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+    public function updateClass(Request $request){
+        try {
+            $kelas = Kelas::find($request->id);
+            $kelas->class = $request->kelas;
+            $kelas->semester = $request->semester;
+            $kelas->save();
+
+            return response()->json(['success' => true, 'msg' => 'Kelas updated Successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+    public function deleteClass(Request $request){
+        try {
+            Kelas::where('id', $request->id)->delete();
+
+            return response()->json(['success' => true, 'msg' => 'Class deleted Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }

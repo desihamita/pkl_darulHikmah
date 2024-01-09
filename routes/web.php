@@ -42,6 +42,12 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::post('/update-subject', [AdminController::class, 'updateSubject'])->name('updateSubject');
     Route::post('/delete-subject', [AdminController::class, 'deleteSubject'])->name('deleteSubject');
 
+    //kelas route
+    Route::get('/admin/class', [AdminController::class, 'classDashboard'])->name('classDashboard');
+    Route::post('/create-class', [AdminController::class, 'createClass'])->name('createClass');
+    Route::post('/update-class', [AdminController::class, 'updateClass'])->name('updateClass');
+    Route::post('/delete-kelas', [AdminController::class, 'deleteClass'])->name('deleteClass');
+
     //exam route
     Route::get('/admin/exam', [AdminController::class, 'examDashboard'])->name('examDashboard');
     Route::post('/create-exam', [AdminController::class, 'createExam'])->name('createExam');
