@@ -18,10 +18,15 @@ class Exam extends Model
         'date',
         'attempt',
         'token',
-        'marks'
+        'marks',
+        'kelas_id'
     ];
     protected $appends = ['attempt_counter'];
     public $count = '';
+
+    public function kelas() {
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
+    }
 
     public function subjects(){
         return $this->belongsTo(Subject::class, 'subject_id', 'id');

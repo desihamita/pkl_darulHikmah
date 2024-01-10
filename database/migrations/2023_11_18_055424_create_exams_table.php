@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->string('exam_name');
-            $table->integer('subject_id');
+            $table->bigInteger('subject_id');
+            $table->bigInteger('kelas_id');
             $table->string('time');
             $table->date('date');
             $table->string('token');

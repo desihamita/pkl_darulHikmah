@@ -122,6 +122,7 @@ class AdminController extends Controller
     public function examDashboard(Request $request){
         $exams = Exam::query();
         $subjects = Subject::all();
+        $kelas = Kelas::all();
 
         if ($request->get('search')) {
             $searchTerm = $request->get('search');
@@ -133,9 +134,14 @@ class AdminController extends Controller
             });
         }
 
-        $exams = $exams->with('subjects')->get();
+        $exams = $exams->with('subjects', 'kelas')->get();
 
-        return view('admin.exam-dashboard', compact('subjects', 'exams', 'request'));
+        return view('admin.exam-dashboard', compact(
+            'subjects', 
+            'exams',
+            'kelas', 
+            'request'
+        ));
     }
     public function createExam(Request $request){
         try {
@@ -143,6 +149,7 @@ class AdminController extends Controller
                 'token' => strtoupper(Str::random(8)),
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
+                'kelas_id' => $request->kelas_id,
                 'time' => $request->time,
                 'date' => $request->date,
                 'attempt' => $request->attempt
@@ -167,6 +174,7 @@ class AdminController extends Controller
             $exam = Exam::find($request->exam_id);
             $exam->exam_name = $request->exam_name;
             $exam->subject_id = $request->subject_id;
+            $exam->kelas_id = $request->kelas_id;
             $exam->date = $request->date;
             $exam->time = $request->time;
             $exam->attempt = $request->attempt;

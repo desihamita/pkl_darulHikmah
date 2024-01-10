@@ -43,6 +43,7 @@
                         <th>No</th>
                         <th>Nama Ujian</th>
                         <th>Mata Pelajaran</th>
+                        <th>Kelas</th>
                         <th>Tanggal Ujian</th>
                         <th>Waktu Ujian</th>
                         <th>Percobaan</th>
@@ -58,6 +59,13 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $exam->exam_name }}</td>
                                 <td>{{ $exam->subjects->subject }}</td>
+                                <td>
+                                    @if ($exam->kelas)
+                                        {{ $exam->kelas->class }}
+                                    @else
+                                        No Class Assigned
+                                    @endif
+                                </td>
                                 <td>{{ $exam->date }}</td>
                                 <td>{{ $exam->time }} hrs</td>
                                 <td>{{ $exam->attempt }} </td>
@@ -85,6 +93,7 @@
                         <th>No</th>
                         <th>Nama Ujian</th>
                         <th>Mata Pelajaran</th>
+                        <th>Kelas</th>
                         <th>Tanggal Ujian</th>
                         <th>Waktu Ujian</th>
                         <th>Percobaan</th>
@@ -114,6 +123,10 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
+                        <label for="exam_name">Nama Ujian</label>
+                        <input type="text" name="exam_name" placeholder="Enter Exam Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
                         <label for="mata_pelajaran">Mata Pelajaran</label>
                         <select name="subject_id" class="form-control" required>
                             <option value="">Select Subject</option>
@@ -125,8 +138,15 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="exam_name">Nama Ujian</label>
-                        <input type="text" name="exam_name" placeholder="Enter Exam Name" class="form-control" required>
+                        <label for="kelas">Kelas</label>
+                        <select name="kelas_id" class="form-control" required>
+                            <option value="">Select Kelas</option>
+                            @if (count($kelas) > 0)
+                                @foreach ($kelas as $item)
+                                    <option value="{{ $item->id }}">{{ $item->class }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="date">Tanggal Ujian</label>
@@ -175,6 +195,17 @@
                             @if (count($subjects) > 0)
                                 @foreach ($subjects as $subject)
                                     <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="kelas">Kelas</label>
+                        <select name="kelas_id" id="exam_kelas_id" class="form-control" required>
+                            <option value="">Select Kelas</option>
+                            @if (count($kelas) > 0)
+                                @foreach ($kelas as $item)
+                                    <option value="{{ $item->id }}">{{ $item->class }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -332,6 +363,7 @@
                         var exam = data.data;
                         $("#exam_name").val(exam[0].exam_name);
                         $("#exam_subject_id").val(exam[0].subject_id);
+                        $("#exam_kelas_id").val(exam[0].kelas_id);
                         $("#exam_time").val(exam[0].time);
                         $("#exam_date").val(exam[0].date);
                         $("#exam_attempt").val(exam[0].attempt);
