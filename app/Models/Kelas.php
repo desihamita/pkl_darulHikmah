@@ -13,4 +13,8 @@ class Kelas extends Model
         'class',
         'semester'
     ];
+
+    public function student() {
+        return $this->hasMany(User::class, 'kelas_id', 'id');
+    }
 }

@@ -19,9 +19,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'nis',
         'email',
         'password',
+        'kelas_id'
     ];
+    
+    public function kelas() {
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

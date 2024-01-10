@@ -35,7 +35,10 @@ class AdminController extends Controller
 
         $subjects = $subjects->get();
 
-        return view('admin.subject-dashboard', compact('subjects', 'request'));
+        return view('admin.subject-dashboard', compact(
+            'subjects',
+            'request'
+        ));
     }
     public function createSubject(Request $request){
         try {
@@ -315,6 +318,7 @@ class AdminController extends Controller
     // students
     public function studentDashboard(Request $request){
         $students = User::query();
+        $kelas = Kelas::all();
 
         if ($request->get('search')) {
             $students = $students->where('name', 'ILIKE', '%' . $request->get('search') . '%')
@@ -322,16 +326,21 @@ class AdminController extends Controller
             ->orWhere('email', 'ILIKE', '%' . $request->get('search') . '%');
         }
 
-        $students = $students->where('is_admin', 0)->get();
-        return view('admin.student-dashboard', compact('students', 'request'));
+        $students = $students->with('kelas')->where('is_admin', 0)->get();
+
+        return view('admin.student-dashboard', compact(
+            'students',
+            'kelas',
+            'request'
+        ));
     }
     public function createStudent(Request $request){
         try {
-            $password = Str::random(8);
             User::insert([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($password),
+                'password' => Hash::make($request->password),
+                'kelas_id' => $request->kelas_id,
                 'nis' => $request->nis
             ]);
 
@@ -345,6 +354,7 @@ class AdminController extends Controller
             $student = User::find($request->id);
             $student->nis = $request->nis;
             $student->name = $request->nama;
+            $student->kelas_id = $request->kelas_id;
             $student->email = $request->email;
             $student->save();
 

@@ -43,6 +43,7 @@
                         <th>No</th>
                         <th>NIS</th>
                         <th>Nama</th>
+                        <th>kelas</th>
                         <th>Email</th>
                         <th>Action</th>
                     </tr>
@@ -54,11 +55,18 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $student->nis }}</td>
                                 <td>{{ $student->name }}</td>
+                                <td>
+                                    @if ($student->kelas)
+                                        {{ $student->kelas->class }}
+                                    @else
+                                        No Class Assigned
+                                    @endif
+                                </td>
                                 <td>{{ $student->email }}</td>
                                 <td>
-                                    <button class="btn btn-info updateButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-email="{{ $student->email }}" data-nis="{{ $student->nis }}" data-toggle="modal" data-target="#modal-update">Update</button>
+                                    <button class="btn btn-info updateButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-email="{{ $student->email }}" data-nis="{{ $student->nis }}" data-kelas="{{ $student->kelas_id }}" data-toggle="modal" data-target="#modal-update">Update</button>
 
-                                    <button class="btn btn-danger deleteButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
+                                    <button class="btn btn-danger deleteButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-kelas="{{ $student->kelas_id }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -73,6 +81,7 @@
                         <th>No</th>
                         <th>NIS</th>
                         <th>Nama</th>
+                        <th>kelas</th>
                         <th>Email</th>
                         <th>Action</th>
                     </tr>
@@ -89,42 +98,47 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Data Mata Pelajaran</h4>
+            <h4 class="modal-title">Tambah Data</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <form id="createStudent">
-                @csrf
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="NIS">NIS</label>
-                        <input type="text" class="form-control" name="nis" placeholder="Enter Student NIS" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Nama">Nama</label>
-                        <input type="text" class="form-control" name="name" placeholder="Enter Student Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Email">Email</label>
-                        <input type="text" class="form-control" name="email" placeholder="Enter Student Email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Password">Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="Enter Student Password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Password-confirm">Password Confirmation</label>
-                        <input type="password" class="form-control" name="password_confirmation" placeholder="Enter Student Password" required>
-                    </div>
+          <form id="createStudent">
+            @csrf
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="NIS">NIS</label>
+                    <input type="text" class="form-control" name="nis" placeholder="Enter Student NIS" required>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                <div class="form-group">
+                    <label for="Nama">Nama</label>
+                    <input type="text" class="form-control" name="name" placeholder="Enter Student Name" required>
                 </div>
-            </form>
-          </div>
+                <div class="form-group">
+                    <label for="kelas">Kelas</label>
+                    <select name="kelas_id" class="form-control" required>
+                        <option value="">Select Kelas</option>
+                        @if (count($kelas) > 0)
+                            @foreach ($kelas as $item)
+                                <option value="{{ $item->id }}">{{ $item->class }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Email">Email</label>
+                    <input type="text" class="form-control" name="email" placeholder="Enter Student Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter Student Password" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
         </div>
       </div>
     </div>
@@ -151,6 +165,17 @@
                         <div class="form-group">
                             <label for="Nama">Nama</label>
                             <input type="text" name="nama" id="nama" placeholder="Enter Exam Name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kelas">Kelas</label>
+                            <select name="kelas_id" id="kelas_id" class="form-control" required>
+                                <option value="">Select Kelas</option>
+                                @if (count($kelas) > 0)
+                                    @foreach ($kelas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->class }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="Email">Email</label>
@@ -247,10 +272,12 @@
             var nis = $(this).attr('data-nis');
             var name = $(this).attr('data-student');
             var email = $(this).attr('data-email');
+            var kelas_id = $(this).attr('data-kelas');
 
             $("#nis").val(nis);
             $("#nama").val(name);
             $("#email").val(email);
+            $("#kelas_id").val(kelas_id);
             $("#id").val(id);
         });
 
