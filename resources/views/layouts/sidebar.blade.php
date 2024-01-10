@@ -50,24 +50,21 @@
             </li>
             <li class="nav-item">
                 <a href="/admin/exam" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Ujian</p>
+                    <i class="fas fa-file nav-icon"></i>
+                    <p>Ujian</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="/admin/review-exams" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Hasil Ujian</p>
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>Hasil Ujian</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="../examples/profile.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                  <p>Pengaturan</p>
-                </a>
-            </li>
-            <li>
-              <a href="/logout"><span class="fa fa-sign-out mr-3"></span>Logout</a>
+              <a href="/logout" class="nav-link">
+                <i class="fas fa fa-sign-in-alt mr-2 nav-icon"></i>
+                <p>Logout</p>
+            </a>
             </li>
         </ul>
       </nav>
