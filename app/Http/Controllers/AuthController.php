@@ -12,10 +12,9 @@ use Illuminate\Support\Str;
 
 
 use App\Models\User;
-use App\Models\PasswordReset;
 use App\Models\Subject;
 use App\Models\Exam;
-use Mail;
+use App\Models\Question;
 
 class AuthController extends Controller
 {
@@ -53,7 +52,17 @@ class AuthController extends Controller
     }
 
     public function adminDashboard(){
-        return view('admin.admin-dashboard');
+        $totalStudents = User::where('is_admin', false)->count();
+        $totalExams = Exam::count();
+        $totalQna = Question::count();
+        $totalSubject = Subject::count();
+
+        return view('admin.admin-dashboard', [
+            'totalStudents' => $totalStudents,
+            'totalExams' => $totalExams,
+            'totalQna' => $totalQna,
+            'totalSubject' => $totalSubject
+        ]);
     }
 
     public function logout(Request $request){
