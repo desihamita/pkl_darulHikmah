@@ -41,6 +41,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Token</th>
                         <th>Nama Ujian</th>
                         <th>Mata Pelajaran</th>
                         <th>Kelas</th>
@@ -49,6 +50,7 @@
                         <th>Percobaan</th>
                         <th>Tambah Pertanyaan</th>
                         <th>Lihat Pertanyaan</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -57,6 +59,7 @@
                         @foreach ($exams as $exam)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $exam->token }}</td>
                                 <td>{{ $exam->exam_name }}</td>
                                 <td>{{ $exam->subjects->subject }}</td>
                                 <td>
@@ -75,7 +78,16 @@
                                 <td>
                                     <a href="" class="seeQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#seeQnaModal">See Question</a>
                                 </td>
+                                <td id="statusBadge_{{ $exam->id }}">
+                                    @if ($exam->status == true)
+                                        <span class="badge badge-success">Aktif</span>
+                                    @else
+                                        <span class="badge badge-danger">Tidak Aktif</span>
+                                    @endif
+                                </td>
                                 <td>
+                                    <button class="btn btn-warning updateStatusButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-status="{{ $exam->status }}" >Ubah Status</button>
+
                                     <button class="btn btn-info updateButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#modal-update">Update</button>
 
                                     <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
@@ -91,6 +103,7 @@
                 <tfoot>
                     <tr>
                         <th>No</th>
+                        <th>Token</th>
                         <th>Nama Ujian</th>
                         <th>Mata Pelajaran</th>
                         <th>Kelas</th>
@@ -99,6 +112,7 @@
                         <th>Percobaan</th>
                         <th>Tambah Pertanyaan</th>
                         <th>Lihat Pertanyaan</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
@@ -326,6 +340,7 @@
     </div>
 
 </section>
+
 <script>
     $(document).ready(function () {
         $('#createExam').submit(function (e) {
@@ -536,6 +551,31 @@
                 }
             })
         });
+
+        // update status
+        $(document).on('click', '.updateStatusButton', function() {
+            var id = $(this).attr('data-id');
+    
+            $.ajax({
+                url: "{{ url('update-status') }}/" + id,
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                },
+                success: function(data) {
+                    if (data.status == true) {
+                        $('#statusBadge_' + id).html('<span class="badge badge-success">Aktif</span>');
+                        location.reload();
+                    } else if(data.status == false) {
+                        $('#statusBadge_' + id).html('<span class="badge badge-danger">Tidak Aktif</span>');
+                        location.reload();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
     });
 </script>
 <script>

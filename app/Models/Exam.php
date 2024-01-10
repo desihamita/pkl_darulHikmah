@@ -19,7 +19,8 @@ class Exam extends Model
         'attempt',
         'token',
         'marks',
-        'kelas_id'
+        'kelas_id',
+        'status',
     ];
     protected $appends = ['attempt_counter'];
     public $count = '';

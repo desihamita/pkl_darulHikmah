@@ -54,6 +54,7 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::get('/get-exam-detail/{id}', [AdminController::class, 'getExamDetail'])->name('getExamDetail');
     Route::post('/update-exam', [AdminController::class, 'updateExam'])->name('updateExam');
     Route::post('/delete-exam', [AdminController::class, 'deleteExam'])->name('deleteExam');
+    Route::post('/update-status/{id}', [AdminController::class, 'updateStatus'])->name('updateStatus');
 
     // Q&A Route
     Route::get('/admin/qna-ans', [AdminController::class, 'qnaDashboard'])->name('qnaDashboard');

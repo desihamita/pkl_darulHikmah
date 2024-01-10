@@ -33,7 +33,7 @@ class AdminController extends Controller
             $subjects = $subjects->where('subject', 'ILIKE', '%' . $request->get('search') . '%');
         }
 
-        $subjects = $subjects->get();
+        $subjects = $subjects->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->get();
 
         return view('admin.subject-dashboard', compact(
             'subjects',
@@ -80,7 +80,7 @@ class AdminController extends Controller
             $kelas = $kelas->where('class', 'ILIKE', '%' . $request->get('search') . '%');
         }
 
-        $kelas = $kelas->get();
+        $kelas = $kelas->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->get();
 
         return view('admin.kelas-dashboard', compact('kelas', 'request'));
     }
@@ -134,7 +134,10 @@ class AdminController extends Controller
             });
         }
 
-        $exams = $exams->with('subjects', 'kelas')->get();
+        $exams = $exams->with('subjects', 'kelas')
+                   ->orderBy('created_at', 'desc')
+                   ->orderBy('updated_at', 'desc')
+                   ->get();
 
         return view('admin.exam-dashboard', compact(
             'subjects', 
@@ -185,6 +188,14 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
+    public function updateStatus($id) {
+        $exam = Exam::findOrFail($id);
+        $exam->status = !$exam->status;
+        $exam->save();
+    
+        return response()->json(['status' => $exam->status]);
+    }
+    
     public function deleteExam(Request $request){
         try {
             Exam::where('id', $request->exam_id)->delete();
@@ -211,7 +222,10 @@ class AdminController extends Controller
             });
         }
 
-        $questions = $questions->with('answers', 'kelas', 'subjects')->get();
+        $questions = $questions->with('answers', 'kelas', 'subjects')
+                                ->orderBy('created_at', 'desc')
+                                ->orderBy('updated_at', 'desc')
+                                ->get();
 
         return view('admin.qna-dashboard', compact(
             'questions', 
@@ -342,7 +356,11 @@ class AdminController extends Controller
             ->orWhere('email', 'ILIKE', '%' . $request->get('search') . '%');
         }
 
-        $students = $students->with('kelas')->where('is_admin', 0)->get();
+        $students = $students->with('kelas')
+                             ->where('is_admin', 0)
+                             ->orderBy('created_at', 'desc')
+                             ->orderBy('updated_at', 'desc')
+                             ->get();
 
         return view('admin.student-dashboard', compact(
             'students',
@@ -462,7 +480,9 @@ class AdminController extends Controller
 
     // Marks
     public function loadMarks(){
-        $exams = Exam::with('qnaExams')->get();
+        $exams = Exam::with('qnaExams')->orderBy('created_at', 'desc')
+                                       ->orderBy('updated_at', 'desc')
+                                       ->get();
         return view('admin.marks-dashboard', compact('exams'));
     }
     public function updateMarks(Request $request){
@@ -479,7 +499,10 @@ class AdminController extends Controller
 
     // reviewsExams
     public function reviewExams(Request $request){
-        $attemps = ExamAttempt::with('user', 'exam')->orderBy('id')->get();
+        $attemps = ExamAttempt::with('user', 'exam')->orderBy('id')
+                                                    ->orderBy('created_at', 'desc')
+                                                    ->orderBy('updated_at', 'desc')
+                                                    ->get();
         return view('admin.review-exams', compact('attemps', 'request'));
     }
     public function reviewQna(Request $request){

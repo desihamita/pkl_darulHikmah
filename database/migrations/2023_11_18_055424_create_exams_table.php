@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('token');
             $table->float('marks');
+            $table->boolean('status')->default('false');
             $table->float('pass_maks')->default(0);
             $table->timestamps();
         });
