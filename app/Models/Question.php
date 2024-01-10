@@ -11,9 +11,14 @@ class Question extends Model
     protected $fillable = [
         'question',
         'explanation',
-        'subject_id'
+        'subject_id',
+        'kelas_id'
     ];
 
+    public function kelas() {
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
+    }
+    
     public function answers() {
         return $this->hasMany(Answer::class, 'question_id', 'id');
     }

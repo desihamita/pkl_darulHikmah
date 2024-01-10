@@ -42,6 +42,7 @@
                     <tr>
                         <th>No</th>
                         <th>Mata Pelajaran</th>
+                        <th>kelas</th>
                         <th>Pertanyaan</th>
                         <th>Jawaban</th>
                         <th>Action</th>
@@ -53,6 +54,13 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $question->subjects->subject }}</td>
+                                <td>
+                                    @if ($question->kelas)
+                                        {{ $question->kelas->class }}
+                                    @else
+                                        No Class Assigned
+                                    @endif
+                                </td>
                                 <td>{{ $question->question }}</td>
                                 <td>
                                     <a href="#" class="ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</a>
@@ -75,6 +83,7 @@
                         <th>No</th>
                         <th>Mata Pelajaran</th>
                         <th>Pertanyaan</th>
+                        <th>kelas</th>
                         <th>Jawaban</th>
                         <th>Action</th>
                     </tr>
@@ -101,8 +110,8 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Answer</th>
-                                <th>Is Correct</th>
+                                <th>Jawaban</th>
+                                <th>Jawaban Benar</th>
                             </tr>
                         </thead>
                         <tbody class="showAnswers">
@@ -122,7 +131,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Tambah Data Mata Pelajaran</h4>
+            <h4 class="modal-title">Tambah Data</h4>
             <button id="createAnswer" class="btn btn-info ml-5">Add Answer</button>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -138,7 +147,7 @@
                 <div class="form-group">
                     <label for="subject">Mata Pelajaran</label>
                     <select name="subject_id" class="form-control" required>
-                        <option value="">Select Subject</option>
+                        <option value="">Pilih Mata Pelajaran</option>
                         @if (count($subjects) > 0)
                             @foreach ($subjects as $subject)
                                 <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
@@ -147,7 +156,18 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="explanation">Pembahasan</label>
+                    <label for="kelas">Kelas</label>
+                    <select name="kelas_id" class="form-control" required>
+                        <option value="">Pilih Kelas</option>
+                        @if (count($kelas) > 0)
+                            @foreach ($kelas as $item)
+                                <option value="{{ $item->id }}">{{ $item->class }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="explanation">Pembahasan (Optional)</label>
                     <textarea name="explanation" class="form-control" rows="5" placeholder="Enter your explanation (Optional)"></textarea>
                 </div>
             </div>
@@ -166,7 +186,7 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Ubah Data Siswa/i</h4>
+              <h4 class="modal-title">Ubah Data</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -174,28 +194,36 @@
             <form id="updateQna">
                 @csrf
                 <div class="modal-body updateModalAnswers">
-                    <div class="row">
-                        <div class="col">
-                            <input type="hidden" name="question_id" id="question_id">
-                            <input type="text" class="w-100" name="question" id="question" placeholder="Enter Question" required>
-                        </div>
+                    <input type="hidden" name="question_id" id="question_id">
+                    <div class="form-group">
+                        <label for="question">Pertanyaan</label>
+                        <input type="text" class="form-control" name="question" id="question" placeholder="Enter Question" required>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col">
-                            <select name="subject_id" id="subject_id" class="w-100" required>
-                                <option value="">Select Subject</option>
-                                @if (count($subjects) > 0)
-                                    @foreach ($subjects as $subject)
-                                        <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="subject">Mata Pelajaran</label>
+                        <select name="subject_id" id="subject_id" class="form-control" required>
+                            <option value="">Pilih Mata Pelajaran</option>
+                            @if (count($subjects) > 0)
+                                @foreach ($subjects as $subject)
+                                    <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
-                    <div class="row mt-2">
-                        <div class="col">
-                            <textarea name="explanation" id="explanation" class="w-100" placeholder="Enter your explanation (Optional)"></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label for="kelas">Kelas</label>
+                        <select name="kelas_id" id="kelas_id" class="form-control" required>
+                            <option value="">Pilih Kelas</option>
+                            @if (count($kelas) > 0)
+                                @foreach ($kelas as $item)
+                                    <option value="{{ $item->id }}">{{ $item->class }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="explanation">Pembahasan (Optional)</label>
+                        <textarea name="explanation" id="explanation" class="form-control" placeholder="Enter your explanation (Optional)"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -246,7 +274,7 @@
             <form id="importQna" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <input type="file" name="file" id="fileupload" required accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <input type="file" name="file" class="form-control" id="fileupload" required accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
 
                 </div>
                 <div class="modal-footer">
@@ -374,13 +402,19 @@
                 }, 2000);
             } else {
                 var html = `
-                    <div class="row mt-2 editAnswers">
-                        <input type="radio" name="is_correct" class="edit_is_correct">
-                        <div class="col">
-                            <input type="text" class="form-control" name="new_answers[]" placeholder="Enter Answer" required>
-                            <button class="btn btn-danger removeButton">Remove</button>
+                        <div class="row answers">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="radio" name="is_correct" class="form-check-input edit_is_correct">
+                                        <div class="col d-flex">
+                                            <input type="text" class="form-control mr-2" name="new_answers[]" placeholder="Enter Answer" required>
+                                            <button class="btn btn-danger removeButton">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                 `;
 
                 $(".updateModalAnswers").append(html);
@@ -401,6 +435,7 @@
                     $("#question_id").val(qna['id']);
                     $("#question").val(qna['question']);
                     $("#subject_id").val(qna['subject_id']);
+                    $("#kelas_id").val(qna['kelas_id']);
                     $("#explanation").val(qna['explanation']);
                     $(".editAnswers").remove();
 
@@ -413,13 +448,19 @@
                             checked = 'checked';
                         }
                         html += `
-                            <div class="row mt-2 editAnswers">
-                                <input type="radio" name="is_correct" class="edit_is_correct" `+ checked +`>
-                                <div class="col">
-                                    <input type="text" class="form-control" name="answers[`+ qna['answers'][i]['id'] +`]" value="`+ qna['answers'][i]['answer'] +`" placeholder="Enter Answer" required>
-                                    <button class="btn btn-danger removeButton removeAnswer" data-id="`+ qna['answers'][i]['id'] +`">Remove</button>
+                        <div class="row editAnswers">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="radio" name="is_correct" class="form-check-input edit_is_correct" `+ checked +`>
+                                        <div class="col d-flex">
+                                            <input type="text" class="form-control mr-2" name="answers[`+ qna['answers'][i]['id'] +`]" value="`+ qna['answers'][i]['answer'] +`" placeholder="Enter Answer" required>
+                                            <button class="btn btn-danger removeButton removeAnswer" data-id="`+ qna['answers'][i]['id'] +`">Remove</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
                         `;
                     }
                     $(".updateModalAnswers").append(html);

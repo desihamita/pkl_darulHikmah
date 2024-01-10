@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Subject;
+use App\Models\Kelas;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -17,16 +18,17 @@ class QnaImport implements ToModel, WithHeadingRow
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row) {
-        if ($row['question'] != 'question') {
-            info('Processing question: ' . $row['question']);
+        if ($row['pertanyaan'] != 'pertanyaan') {
 
-            $subject = Subject::where('subject', $row['subject'])->first();
+            $subject = Subject::where('subject', $row['mapel'])->first();
+            $kelas = Kelas::where('class', $row['kelas'])->first();
 
             if ($subject != null) {
                 $questionId = Question::insertGetId([
-                    'question' => $row['question'],
+                    'question' => $row['pertanyaan'],
                     'subject_id' => $subject->id,
-                    'explanation' => $row['explanation'],
+                    'kelas_id' => $kelas->id,
+                    'explanation' => $row['pembahasan'],
                 ]);
 
                 for ($i = 1; $i <= 6; $i++) {

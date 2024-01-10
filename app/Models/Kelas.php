@@ -20,5 +20,9 @@ class Kelas extends Model
     
     public function exam() {
         return $this->hasMany(Exam::class, 'kelas_id', 'id');
+    } 
+    
+    public function question() {
+        return $this->hasMany(Question::class, 'kelas_id', 'id');
     }
 }
