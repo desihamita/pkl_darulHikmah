@@ -1,68 +1,62 @@
-@extends('layout.student-layout')
+@extends('layouts.student-layout')
 
-@section('space-work')
-    <h1>Exams</h1>
-    <div class="row">
-        @foreach ($exams as $item)
-        <div class="col-sm-6 mb-3 mb-sm-0">
-          <div class="card">
-            <div class="card-header bg-primary"></div>
-            <div class="card-body">
-                <h5 class="card-title">{{ $item->exam_name }}</h5>
-                <form method="post" action="{{ route('check.token') }}" >
-                    @csrf
-                    <div class="card-text">
-                        <label style="display:none;">{{ $item->id }}</label>
-                        <div class="row">
-                          <label class="col-sm-4 col-form-label">Mata Pelajaran </label>
-                          <div class="col-sm-8">
-                            <label class="col-form-label">:&nbsp; {{ $item->subjects->subject}}</label>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <label class="col-sm-4 col-form-label">Tanggal Ujian</label>
-                          <div class="col-sm-8">
-                            <label class="col-form-label">:&nbsp; {{ $item->date}}</label>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <label class="col-sm-4 col-form-label">Waktu Ujian</label>
-                          <div class="col-sm-8">
-                            <label class="col-form-label">:&nbsp; {{ $item->time}}</label>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <label class="col-sm-4 col-form-label">Total Attempt</label>
-                          <div class="col-sm-8">
-                            <label class="col-form-label">:&nbsp; {{ $item->attempt}}</label>
-                          </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-4 col-form-label">Available Attempt</label>
-                            <div class="col-sm-8">
-                                <label class="col-form-label">:&nbsp; {{ $item->attempt_counter }}</label>
+@section('content')
+    <div class="container">
+        <div class="row">
+            @php
+                $activeExams = $exams->where('status', true);
+            @endphp
+            @if ($activeExams->count() > 0)
+                @foreach ($exams as $item)
+                    @if ($item->status == true)
+                        <div class="col-lg-5">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h5 class="card-title m-0">{{ $item->exam_name }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" action="{{ route('check.token') }}" >
+                                        @csrf
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Mata Pelajaran</dt>
+                                            <dd class="col-sm-8">: {{ $item->subjects->subject }}</dd>
+        
+                                            <dt class="col-sm-4">Kelas</dt>
+                                            <dd class="col-sm-8">: {{ $item->kelas->class }} / Semester{{ $item->kelas->semester }}</dd>
+        
+                                            <dt class="col-sm-4">Tanggal Ujian</dt>
+                                            <dd class="col-sm-8">: {{ $item->date}}</dd>
+        
+                                            <dt class="col-sm-4">Waktu Ujian</dt>
+                                            <dd class="col-sm-8">: {{ $item->time}}</dd>
+
+                                            <dt class="col-sm-4">Jumlah Soal</dt>
+                                            <dd class="col-sm-8">: {{ $item->qnaExams->count() }}</dd>
+        
+                                            <dt class="col-sm-4">Token</dt>
+                                            <dd class="col-sm-8"><input type="text" name="token" id="token" class="form-control"></dd>
+                                        </dl>
+                                        <div class="d-grid mt-3 d-md-flex justify-content-md-end">
+                                            <button class="btn btn-primary" type="submit">Mulai</button>
+                                        </div>
+                                    </form>
+                                    <div id="notif">
+                                        @if(session('message'))
+                                            {{ session('message') }}
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                        </div>                        
-                        <div class="row">
-                          <label class="col-sm-4 col-form-label">Token</label>
-                          <div class="col-sm-8">
-                            :&nbsp;<input type="text" name="token" id="token">
-                          </div>
                         </div>
-                    </div>
-                    <div class="d-grid mt-3 d-md-flex justify-content-md-end">
-                        <button class="btn btn-primary" type="submit">Mulai</button>
-                    </div>
-                </form>
-                <div id="notif">
-                    @if(session('message'))
-                        {{ session('message') }}
                     @endif
+                @endforeach
+            @else
+                <div class="col-lg-12">
+                    <div class="alert alert-info" role="alert">
+                        Tidak ada ujian yang aktif saat ini.
+                    </div>
                 </div>
-            </div>
-          </div>
+            @endif
         </div>
-        @endforeach
     </div>
 @endsection
-

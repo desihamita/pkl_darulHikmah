@@ -64,7 +64,7 @@
               <a href="/logout" class="nav-link">
                 <i class="fas fa fa-sign-in-alt mr-2 nav-icon"></i>
                 <p>Logout</p>
-            </a>
+              </a>
             </li>
         </ul>
       </nav>

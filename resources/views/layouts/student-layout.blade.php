@@ -1,54 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Examination</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@yield('title')</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <script src="{{asset('js/multiselect-dropdown.js')}}"></script>
-
-    <style>
-        .multiselect-dropdown{
-            width:100% !important;
-        }
-    </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
+  <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
+  
 </head>
-  <body>
-    <div class="wrapper d-flex align-items-stretch">
-      <nav id="sidebar">
-        <div class="custom-menu">
-          <button type="button" id="sidebarCollapse" class="btn btn-primary">
-            <i class="fa fa-bars"></i>
-            <span class="sr-only">Toggle Menu</span>
-          </button>
-        </div>
-        <h1><a href="/admin/dashboard" class="logo">Welcome, {{ Auth::user()->name}}</a></h1>
-        <ul class="list-unstyled components mb-5">
-          <li class="active">
-            <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Dashboard</a>
-          </li>
-          <li>
-            <a href="/logout"><span class="fa fa-sign-out mr-3"></span>Logout</a>
-          </li>
-        </ul>
-      </nav>
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
 
-      <!-- Page Content  -->
-      <div id="content" class="p-4 p-md-5 pt-5">
-        @yield('space-work')
-      </div>
+  <nav class="main-header navbar navbar-expand navbar-light bg-primary">
+    <div class="container">
+      <a href="/" class="navbar-brand">
+        <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: .8">
+        <span class="brand-text font-weight-light" style="color: white; font-size: 24px;"> <strong>DarulHikmah</strong></span>
+      </a>
+
+      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse order-3" id="navbarCollapse"></div>
+
+      <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" style="color: white">Welcome, {{ Auth::user()->name }}</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout" class="nav-link">
+                <i class="fas fa fa-sign-in-alt mr-2 nav-icon" style="color: white; font-size: 24px;"></i>
+            </a>
+        </li>
+      </ul>
     </div>
+  </nav>
 
-    {{-- <script src="{{ asset('js/jquery.min.js') }}"></script> --}}
-    <script src="{{ asset('js/popper.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-  </body>
+  <div class="content-wrapper">
+    <div class="content-header"></div>
+    <div class="content">
+      @yield('content')
+    </div>
+  </div>
+
+  <aside class="control-sidebar control-sidebar-dark"></aside>
+
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-inline">
+      Anything you want
+    </div>
+    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+  </footer>
+</div>
+
+<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+</body>
 </html>
