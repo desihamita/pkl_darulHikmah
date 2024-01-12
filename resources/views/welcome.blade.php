@@ -40,7 +40,7 @@
   </nav>
 
   <div class="content-wrapper">
-    <div class="content-header"></div>
+    
     <div class="content">
       <div class="container">
         <div class="row">

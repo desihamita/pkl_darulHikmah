@@ -363,7 +363,7 @@
         });
 
         // Update subject
-        $('.updateButton').click(function() {
+        $(document).on('click', '.updateButton', function() {
             var id = $(this).attr('data-id');
             $("#exam_id").val(id);
 
@@ -408,7 +408,7 @@
         });
 
         // Delete Subject
-        $(".deleteButton").click(function() {
+        $(document).on('click', '.deleteButton', function() {
             var id = $(this).attr('data-id');
             $("#delete_exam_id").val(id);
         });
@@ -432,7 +432,7 @@
         });
 
         // add questions
-        $('.addQuestion').click(function(){
+        $(document).on('click', '.addQuestion', function() {
             var id = $(this).attr('data-id');
             $('#addExamId').val(id);
 
@@ -495,7 +495,8 @@
         });
 
         // see Questions
-        $('.seeQuestion').click(function(){
+
+        $(document).on('click', '.seeQuestion', function() {
             var id = $(this).attr('data-id');
 
             $.ajax({
@@ -555,7 +556,7 @@
         // update status
         $(document).on('click', '.updateStatusButton', function() {
             var id = $(this).attr('data-id');
-    
+
             $.ajax({
                 url: "{{ url('update-status') }}/" + id,
                 type: "POST",

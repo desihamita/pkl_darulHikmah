@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
   <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-  
+
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
 
-  <nav class="main-header navbar navbar-expand navbar-light bg-primary">
+  <nav class="main-header navbar navbar-expand navbar-light bg-info">
     <div class="container">
       <a href="/" class="navbar-brand">
         <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: .8">
@@ -40,7 +40,7 @@
   </nav>
 
   <div class="content-wrapper">
-    <div class="content-header"></div>
+    <div class="content-header mt-2"></div>
     <div class="content">
       @yield('content')
     </div>

@@ -27,7 +27,7 @@ class ExamController extends Controller
     public function loadExamDashboard($id){
         $qnaExam = Exam::where('token', $id)->with('qnaExams')->get();
         if (count($qnaExam) > 0) {
-            
+
             $attemptCount = ExamAttempt::where(['exam_id'=> $qnaExam[0]['id'], 'user_id' => auth()->user()->id])->count();
 
             if ($attemptCount >= $qnaExam[0]['attempt']) {
@@ -35,7 +35,6 @@ class ExamController extends Controller
             } else if ($qnaExam[0]['date'] == date('Y-m-d')) {
                 if (count($qnaExam[0]['qnaExams']) > 0) {
                     $qna = QnaExam::where('exam_id', $qnaExam[0]['id'])->with('question', 'answers')->get();
-
                     $shuffledQna = $qna->shuffle();
 
                     return view('student.exam-dashboard', ['success' => true, 'exam' => $qnaExam, 'qna' => $shuffledQna]);
