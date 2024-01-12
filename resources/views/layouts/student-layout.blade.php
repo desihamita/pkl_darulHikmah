@@ -40,7 +40,7 @@
   </nav>
 
   <div class="content-wrapper">
-    <div class="content-header mt-2"></div>
+    <div class="content-header"></div>
     <div class="content">
       @yield('content')
     </div>

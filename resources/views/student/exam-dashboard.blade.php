@@ -61,14 +61,8 @@
                                     <div class="text-center">
                                         <button type="button" class="btn btn-info btn-previous" onclick="prevQuestion()">Previous</button>
                                         <button type="button" class="btn btn-info btn-next" onclick="nextQuestion()">Next</button>
-                                        
-                                        @php
-                                            $totalQuestions = count($qna);
-                                        @endphp
-                                    
-                                        @if ($loop->iteration === $totalQuestions)
-                                            <input type="submit" class="btn btn-primary btn-submit">
-                                        @endif
+
+                                        <input type="submit" class="btn btn-primary btn-submit">
                                     </div>
                                     
                                 </form>
@@ -131,6 +125,50 @@
         }
     
         $(document).ready(function () {
+            $(".form").submit(function() {
+                var currentQuestionId = $(this).closest(".question-card").data("question-id");
+
+                $('.select_ans:checked').each(function() {
+                    var no = $(this).attr('data-id');
+                    $('#ans_' + no).val($(this).val());
+                });
+
+                // Pindah ke kartu pertanyaan berikutnya
+                showNextQuestion(currentQuestionId);
+                return false;
+            });
+
+            var time = @json($time);
+            $('.time').text(time[0] + ':' + time[1] + ':00 Left Time');
+
+            var seconds = 1;
+            var hours = parseInt(time[0]);
+            var minutes = parseInt(time[1]);
+
+            var timer = setInterval(() => {
+                if (hours == 0 && minutes == 0 && seconds == 0) {
+                    clearInterval(timer);
+                    $('#exam_form').submit();
+                }
+                console.log(hours + " -:- " + minutes + " -:- " + seconds)
+                if (seconds <= 0) {
+                    minutes--;
+                    seconds = 59;
+                }
+                if (minutes <= 0 && hours != 0) {
+                    hours--;
+                    minutes = 59;
+                    seconds = 59;
+                }
+
+                let tempHours = hours.toString().length > 1 ? hours : '0' + hours;
+                let tempMinutes = minutes.toString().length > 1 ? minutes : '0' + minutes;
+                let tempSeconds = seconds.toString().length > 1 ? seconds : '0' + seconds;
+
+                $('.time').text(tempHours + ':' + tempMinutes + ':' + tempSeconds + '');
+                seconds--;
+            }, 1000);
+
             $(".btn-next").on("click", showNextQuestion);
             $(".btn-previous").on("click", showPreviousQuestion);
     
