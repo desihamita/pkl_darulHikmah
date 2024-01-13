@@ -23,7 +23,7 @@ class QnaExam extends Model
         return $this->belongsTo(Exam::class, 'exam_id', 'id');
     }
 
-    public function answers(){
+    public function answers() {
         return $this->hasMany(Answer::class, 'question_id', 'question_id');
     }
 }

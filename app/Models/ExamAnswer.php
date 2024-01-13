@@ -16,11 +16,14 @@ class ExamAnswer extends Model
         'answer_id'
     ];
 
-    public function question() {
+    public function question()
+    {
         return $this->hasOne(Question::class, 'id', 'question_id');
     }
 
-    public function answer() {
+    public function answer()
+    {
         return $this->hasOne(Answer::class, 'id', 'answer_id');
     }
+
 }

@@ -34,9 +34,6 @@
         <ul class="navbar-nav ml-auto">
         <li class="nav-item">
             <div class="user-panel d-flex">
-                <div class="image">
-                <img src="{{asset('dist/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
-                </div>
                 <div class="info">
                 <a href="#" class="d-block">{{ Auth::user()->name }}</a>
                 </div>

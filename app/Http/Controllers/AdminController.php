@@ -140,9 +140,9 @@ class AdminController extends Controller
                    ->get();
 
         return view('admin.exam-dashboard', compact(
-            'subjects', 
+            'subjects',
             'exams',
-            'kelas', 
+            'kelas',
             'request'
         ));
     }
@@ -192,10 +192,10 @@ class AdminController extends Controller
         $exam = Exam::findOrFail($id);
         $exam->status = !$exam->status;
         $exam->save();
-    
+
         return response()->json(['status' => $exam->status]);
     }
-    
+
     public function deleteExam(Request $request){
         try {
             Exam::where('id', $request->exam_id)->delete();
@@ -228,8 +228,8 @@ class AdminController extends Controller
                                 ->get();
 
         return view('admin.qna-dashboard', compact(
-            'questions', 
-            'subjects', 
+            'questions',
+            'subjects',
             'kelas',
             'request'
         ));
@@ -499,10 +499,27 @@ class AdminController extends Controller
 
     // reviewsExams
     public function reviewExams(Request $request){
-        $attemps = ExamAttempt::with('user', 'exam')->orderBy('id')
-                                                    ->orderBy('created_at', 'desc')
-                                                    ->orderBy('updated_at', 'desc')
-                                                    ->get();
+        $attemps = ExamAttempt::query();
+                                                    
+        $exam = Exam::all();
+        $user = User::all();
+
+        if ($request->get('search')) {
+            $searchTerm = $request->get('search');
+            $attemps->where(function ($query) use ($searchTerm) {
+                $query->orWhereHas('exam', function ($query) use ($searchTerm) {
+                        $query->where('exam_name', 'ILIKE', '%' . $searchTerm . '%');
+                    })->orWhereHas('user', function ($query) use ($searchTerm) {
+                        $query->where('name', 'ILIKE', '%' . $searchTerm . '%');
+                    });
+            });
+        }
+
+        $attemps = $attemps->with('user', 'exam', 'examAnswer')->orderBy('id')
+        ->orderBy('created_at', 'desc')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+                   
         return view('admin.review-exams', compact('attemps', 'request'));
     }
     public function reviewQna(Request $request){

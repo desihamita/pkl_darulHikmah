@@ -62,13 +62,11 @@ class ExamController extends Controller
                 $questionId = $request->q[$i];
                 $answerId = $request->input('ans_'.$questionId);
 
-                if (!empty($request->input('ans_'.$questionId))) {
-                    ExamAnswer::insert([
-                        'attempt_id' => $attempt_id,
-                        'question_id' => $questionId,
-                        'answer_id' => $answerId
-                    ]);
-                }
+                ExamAnswer::insert([
+                    'attempt_id' => $attempt_id,
+                    'question_id' => $questionId,
+                    'answer_id' => $answerId
+                ]);
             }
 
         }

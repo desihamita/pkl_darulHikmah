@@ -8,6 +8,7 @@
                 @php
                     $activeExams = $exams->where('status', true);
                 @endphp
+                
                 @if ($activeExams->count() > 0)
                     @foreach ($exams as $item)
                         @if ($item->status == true)
@@ -22,19 +23,19 @@
                                             <dl class="row">
                                                 <dt class="col-sm-4">Mata Pelajaran</dt>
                                                 <dd class="col-sm-8">: {{ $item->subjects->subject }}</dd>
-            
+
                                                 <dt class="col-sm-4">Kelas</dt>
                                                 <dd class="col-sm-8">: {{ $item->kelas->class }} / Semester{{ $item->kelas->semester }}</dd>
-            
+
                                                 <dt class="col-sm-4">Tanggal Ujian</dt>
                                                 <dd class="col-sm-8">: {{ $item->date}}</dd>
-            
+
                                                 <dt class="col-sm-4">Waktu Ujian</dt>
                                                 <dd class="col-sm-8">: {{ $item->time}}</dd>
 
                                                 <dt class="col-sm-4">Jumlah Soal</dt>
                                                 <dd class="col-sm-8">: {{ $item->qnaExams->count() }}</dd>
-            
+
                                                 <dt class="col-sm-4">Token</dt>
                                                 <dd class="col-sm-8"><input type="text" name="token" id="token" class="form-control"></dd>
                                             </dl>

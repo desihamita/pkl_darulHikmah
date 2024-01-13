@@ -21,7 +21,7 @@
                                 @foreach ($qna as $item)
                                 <button type="button" class="btn btn-outline-primary btn-question" data-question-id="{{ $item['question']['id'] }}">
                                     {{ $loop->iteration }}
-                                </button>                    
+                                </button>
                                 @endforeach
                             </div>
                         </div>
@@ -44,14 +44,18 @@
                                     <div class="question-container">
                                         @foreach ($qna as $item)
                                         <div class="question-card" id="question-card-{{ $loop->iteration }}" @if($loop->iteration > 1) style="display: none;" @endif>
+
                                             <h5>Q{{ $loop->iteration }}. {{ $item['question']['question'] }}</h5>
+
                                             <input type="hidden" name="q[]" value="{{ $item['question']['id'] }}">
+
                                             <input type="hidden" name="ans_{{ $item['question']['id'] }}"
                                                 id="ans_{{ $item['question']['id'] }}">
 
                                             @foreach ($item['question']['answers'] as $answer)
                                             <p>
                                                 <input type="radio" name="radio_{{ $item['question']['id'] }}" value="{{ $answer['id'] }}" data-id="{{ $item['question']['id'] }}" class="select_ans ml-5">
+
                                                 {{ $answer['answer']}}
                                             </p>
                                             @endforeach
@@ -64,7 +68,7 @@
 
                                         <input type="submit" class="btn btn-primary btn-submit">
                                     </div>
-                                    
+
                                 </form>
                                 @else
                                     <h3 class="text-center" style="color:red">Questions & Answers not available</h3>
@@ -81,65 +85,20 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        function showNextQuestion() {
-            var currentQuestion = $(".question-card:visible");
-            var nextQuestion = currentQuestion.next(".question-card");
-    
-            if (nextQuestion.length > 0) {
-                currentQuestion.hide();
-                nextQuestion.show();
-                $(".btn-previous").show();
-                $(".btn-submit").hide();
-            } else {
-                $(".btn-submit").show();
-                $(".btn-next").hide();
-                $(".btn-previous").show();
-            }
-        }
-    
-        function showPreviousQuestion() {
-            var currentQuestion = $(".question-card:visible");
-            var prevQuestion = currentQuestion.prev(".question-card");
-    
-            if (prevQuestion.length > 0) {
-                currentQuestion.hide();
-                prevQuestion.show();
-                $(".btn-next").show();
-                $(".btn-submit").hide();
-            } else {
-                $(".btn-previous").hide();
-            }
-        }
-    
-        function showQuestionByNumber(questionNumber) {
-            $(".question-card").hide();
-            $("#question-card-" + questionNumber).show();
-    
-            // Show/hide navigation buttons based on the current question
-            var isFirstQuestion = questionNumber === 1;
-            var isLastQuestion = questionNumber === {{ count($qna) }};
-    
-            $(".btn-previous").toggle(!isFirstQuestion);
-            $(".btn-next").toggle(!isLastQuestion);
-            $(".btn-submit").toggle(isLastQuestion);
-        }
-    
         $(document).ready(function () {
-            $(".form").submit(function() {
+            $('form').submit(function() {
                 var currentQuestionId = $(this).closest(".question-card").data("question-id");
 
                 $('.select_ans:checked').each(function() {
                     var no = $(this).attr('data-id');
                     $('#ans_' + no).val($(this).val());
-                });
+                })
 
-                // Pindah ke kartu pertanyaan berikutnya
                 showNextQuestion(currentQuestionId);
-                return false;
             });
 
             var time = @json($time);
-            $('.time').text(time[0] + ':' + time[1] + ':00 Left Time');
+            $('.time').text(time[0] + ':' + time[1] + ':00');
 
             var seconds = 1;
             var hours = parseInt(time[0]);
@@ -171,17 +130,59 @@
 
             $(".btn-next").on("click", showNextQuestion);
             $(".btn-previous").on("click", showPreviousQuestion);
-    
+
             $(".btn-question").on("click", function () {
                 var questionNumber = $(this).text().trim();
                 showQuestionByNumber(questionNumber);
             });
         });
-    
+        function showNextQuestion() {
+            var currentQuestion = $(".question-card:visible");
+            var nextQuestion = currentQuestion.next(".question-card");
+
+            if (nextQuestion.length > 0) {
+                currentQuestion.hide();
+                nextQuestion.show();
+                $(".btn-previous").show();
+                $(".btn-submit").hide();
+            } else {
+                $(".btn-submit").show();
+                $(".btn-next").hide();
+                $(".btn-previous").show();
+            }
+        }
+
+        function showPreviousQuestion() {
+            var currentQuestion = $(".question-card:visible");
+            var prevQuestion = currentQuestion.prev(".question-card");
+
+            if (prevQuestion.length > 0) {
+                currentQuestion.hide();
+                prevQuestion.show();
+                $(".btn-next").show();
+                $(".btn-submit").hide();
+            } else {
+                $(".btn-previous").hide();
+            }
+        }
+
+        function showQuestionByNumber(questionNumber) {
+            $(".question-card").hide();
+            $("#question-card-" + questionNumber).show();
+
+            // Show/hide navigation buttons based on the current question
+            var isFirstQuestion = questionNumber === 1;
+            var isLastQuestion = questionNumber === {{ count($qna) }};
+
+            $(".btn-previous").toggle(!isFirstQuestion);
+            $(".btn-next").toggle(!isLastQuestion);
+            $(".btn-submit").toggle(isLastQuestion);
+        }
+
         function isValid() {
             var result = true;
             var qlength = parseInt("{{ count($qna) }}") - 1;
-    
+
             for (let i = 1; i <= qlength; i++) {
                 if ($('#ans_' + i).val() == "") {
                     result = false;
@@ -194,5 +195,5 @@
             }
             return result;
         }
-    </script>    
+    </script>
 @endsection
