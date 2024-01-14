@@ -22,6 +22,7 @@ use App\Models\ExamAttempt;
 use App\Models\ExamAnswer;
 
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -500,7 +501,7 @@ class AdminController extends Controller
     // reviewsExams
     public function reviewExams(Request $request){
         $attemps = ExamAttempt::query();
-                                                    
+
         $exam = Exam::all();
         $user = User::all();
 
@@ -519,7 +520,7 @@ class AdminController extends Controller
         ->orderBy('created_at', 'desc')
         ->orderBy('updated_at', 'desc')
         ->get();
-                   
+
         return view('admin.review-exams', compact('attemps', 'request'));
     }
     public function reviewQna(Request $request){
@@ -558,5 +559,41 @@ class AdminController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
+    }
+    public function exportPdf(){
+        $attempts = ExamAttempt::with(['user', 'exam', 'examAnswer'])->get();
+        $pdfData = [];
+
+        foreach ($attempts as $attempt) {
+            $attempt->load('examAnswer');
+
+            $correctAnswers = $attempt->examAnswer->where('answer.is_correct', 1)->count();
+            $incorrectAnswers = $attempt->examAnswer->where('answer.is_correct', 0)->count();
+
+            $totalQuestions = $attempt->examAnswer->pluck('question_id')->unique()->count();
+            $totalScore = $totalQuestions > 0 ? ($correctAnswers * 100) / $totalQuestions : 0;
+
+            $kelas = $attempt->user->kelas->class ?? '';
+            $semester = $attempt->user->kelas->semester ?? '';
+            $kelas = $attempt->user->kelas->class ?? '';
+            $mapel = $attempt->exam->subjects->subject ?? '';
+
+            $pdfData[] = [
+                'id' => $attempt->id,
+                'user_name' => $attempt->user->name,
+                'exam_name' => $attempt->exam->exam_name,
+                'pass_marks' => $attempt->exam->pass_marks,
+                'kelas' => $kelas,
+                'semester' => $semester,
+                'mapel' => $mapel,
+                'correct' => $correctAnswers,
+                'incorrect' => $incorrectAnswers,
+                'score' => $totalScore,
+                'status' => ($attempt->status == 0) ? 'Tidak Lulus' : 'Lulus',
+            ];
+        }
+
+        $pdf = PDF::loadView('admin.export', ['attempts' => $pdfData]);
+        return $pdf->download('exported_data.pdf');
     }
 }

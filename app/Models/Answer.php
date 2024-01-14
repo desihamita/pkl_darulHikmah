@@ -13,4 +13,9 @@ class Answer extends Model
         'answer',
         'is_correct'
     ];
+
+    public function examAnswer()
+    {
+        return $this->hasOne(ExamAnswer::class, 'answer_id', 'id');
+    }
 }

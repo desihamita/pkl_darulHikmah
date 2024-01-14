@@ -1,79 +1,78 @@
+
 <!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Top Navigation</title>
+  <title>Exported Data</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
-  <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-  
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition layout-top-nav">
-<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    <h2 class="text-center">Hasil Ujian</h2>
+                      <div class="card-title mt-2">
+                        <dl class="row" style="font-size: 14px; margin:0;">
+                            <dt class="col-sm-4" style="margin:0;">Nama</dt>
+                            <dd class="col-sm-8" style="margin:0;">sads</dd>
 
-  <nav class="main-header navbar navbar-expand navbar-light bg-primary">
-    <div class="container">
-      <a href="/" class="navbar-brand">
-        <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: .8">
-        <span class="brand-text font-weight-light" style="color: white; font-size: 24px;"> <strong>DarulHikmah</strong></span>
-      </a>
+                            <dt class="col-sm-4" style="margin:0;">Kelas</dt>
+                            <dd class="col-sm-8" style="margin:0;">sads</dd>
 
-      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse order-3" id="navbarCollapse"></div>
-
-      <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-        <li class="nav-item">
-            <a class="nav-link" style="color: white">Welcome, {{ Auth::user()->name }}</a>
-        </li>
-        <li class="nav-item">
-            <a href="/logout" class="nav-link">
-                <i class="fas fa fa-sign-in-alt mr-2 nav-icon" style="color: white; font-size: 24px;"></i>
-            </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="content-wrapper">
-    
-    <div class="content">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="card-title m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <dt class="col-sm-4" style="margin:0;">Semester</dt>
+                            <dd class="col-sm-8" style="margin:0;">sads</dd>
+                          </dl>
+                      </div>
+                    </div>
+                  <div class="card-body">
+                    <table id="example2" class="table table-bordered table-hover">
+                      <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Mata Pelajaran</th>
+                        <th>Benar</th>
+                        <th>Salah</th>
+                        <th>Nilai</th>
+                        <th>Status</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                            <td>Trident</td>
+                            <td>Internet Explorer 4.0</td>
+                            <td>Win 95+</td>
+                            <td> 4</td>
+                            <td>X</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
-  </div>
 
-  <aside class="control-sidebar control-sidebar-dark"></aside>
-
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-inline">
-      Anything you want
-    </div>
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
-</div>
-
-<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
 </body>
 </html>

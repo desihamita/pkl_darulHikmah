@@ -16,6 +16,11 @@ class ExamAnswer extends Model
         'answer_id'
     ];
 
+    public function examAttempt()
+    {
+        return $this->belongsTo(ExamAttempt::class, 'attempt_id', 'id');
+    }
+
     public function question()
     {
         return $this->hasOne(Question::class, 'id', 'question_id');
@@ -23,7 +28,7 @@ class ExamAnswer extends Model
 
     public function answer()
     {
-        return $this->hasOne(Answer::class, 'id', 'answer_id');
+        return $this->belongsTo(Answer::class, 'answer_id', 'id');
     }
 
 }

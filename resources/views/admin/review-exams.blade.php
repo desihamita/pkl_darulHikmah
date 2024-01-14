@@ -11,9 +11,9 @@
                 <div class="card card-outline">
                     <div class="card-header">
                         <h3 class="card-title mt-2">
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-import">
-                                Import Data
-                            </button>
+                            <a href="{{ route('exportPdf') }}" class="btn btn-success">
+                                Export Data
+                            </a>
                         </h3>
 
                         <div class="card-tools">
@@ -81,7 +81,7 @@
                                     @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="7">Students not attempt exams!</td>
+                                    <td colspan="9" class="text-center">Students not attempt exams!</td>
                                 </tr>
                                 @endif
                             </tbody>
@@ -183,7 +183,6 @@
                         }
                         $('.review-exam').html(html);
 
-                        // Update the displayed values
                         $('.total-correct-answers[data-attempt-id="' + id + '"]').text(totalCorrectAnswers);
                         $('.total-incorrect-answers[data-attempt-id="' + id + '"]').text(totalIncorrectAnswers);
                     }
@@ -191,7 +190,6 @@
             });
         });
 
-        // Rest of your code
         $('#reviewForm').submit(function (e) {
             e.preventDefault();
 
@@ -225,7 +223,7 @@
                     if (data.success == true) {
                         var data = data.msg;
                         if (data.length > 0) {
-                            totalQuestions = data.length; 
+                            totalQuestions = data.length;
 
                             for (let i = 0; i < totalQuestions; i++) {
                                 if (data[i]['answer']['is_correct'] == 1) {
@@ -239,7 +237,6 @@
                     $('.total-correct-answers[data-attempt-id="' + attemptId + '"]').text(totalCorrectAnswers);
                     $('.total-incorrect-answers[data-attempt-id="' + attemptId + '"]').text(totalIncorrectAnswers);
 
-                    // Calculate total score and display it
                     var totalScore = calculateTotalScore(totalCorrectAnswers, totalQuestions);
                     $('.total-score[data-attempt-id="' + attemptId + '"]').text(totalScore);
                 }
@@ -249,7 +246,6 @@
         function calculateTotalScore(totalCorrect, totalQuestions) {
             var totalScore = (totalCorrect * 100) / totalQuestions;
 
-            // Round the total score to ensure it's within the range of 0 to 100
             totalScore = Math.max(0, Math.min(totalScore));
             totalScore = Math.round(totalScore);
 
