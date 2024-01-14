@@ -166,7 +166,7 @@ class AdminController extends Controller
     }
     public function getExamDetail($id){
         try {
-            $exam = Exam::where('id', $id)->get();
+            $exam = Exam::with('subjects')->find($id);
 
             return response()->json(['success' => true, 'data' => $exam]);
         } catch (\Exception $ex) {
@@ -421,6 +421,8 @@ class AdminController extends Controller
     public function getQuestions(Request $request){
         try {
             $questions = Question::all();
+            $subjects = Subject::all();
+            $kelas = Kelas::all();
 
             if (count($questions) > 0) {
                 $data = [];
@@ -429,13 +431,20 @@ class AdminController extends Controller
                 foreach ($questions as $question) {
                     $qnaExam = QnaExam::where([
                         'exam_id' => $request->exam_id,
-                        'question_id' => $question->id
+                        'question_id' => $question->id,
                     ])->get();
 
                     if (count($qnaExam) == 0) {
                         $data[$counter]['id'] = $question->id;
                         $data[$counter]['questions'] = $question->question;
                         $data[$counter]['subjects'] = $question->subject_id;
+
+                        $subject = $subjects->firstWhere('id', $question->subject_id);
+                        $kelas = $kelas->firstWhere('id', $question->kelas_id);
+
+                        $data[$counter]['subject_name'] = $subject ? $subject->subject : 'tidak ada mata pelajaran';
+                        $data[$counter]['kelas'] = $kelas ? $kelas->class : 'tidak ada kelas';
+
                         $counter++;
                     }
                 }
@@ -443,7 +452,7 @@ class AdminController extends Controller
             } else {
                 return response()->json(['success'=> false,'msg'=> 'Questions Not Found!']);
             }
-        } catch (\Exception $ex) {
+                    } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }

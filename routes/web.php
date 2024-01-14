@@ -88,7 +88,7 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function() {
     Route::get('/get-reviewed-qna', [AdminController::class, 'reviewQna'])->name('reviewQna');
     Route::post('/approved-qna', [AdminController::class, 'approvedQna'])->name('approvedQna');
     Route::get('/export-pdf', [AdminController::class, 'exportPdf'])->name('exportPdf');
-    
+
 
 });
 

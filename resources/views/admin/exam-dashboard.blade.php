@@ -14,9 +14,6 @@
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-create">
                     Tambah Data
                   </button>
-                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-import">
-                    Import Data
-                </button>
               </h3>
 
               <div class="card-tools">
@@ -286,13 +283,35 @@
                     <div class="modal-body">
                         <input type="hidden" name="exam_id" id="addExamId">
 
-                        <div class="form-group">
-                            <input type="search" name="search" id="search" class="form-control" onkeyup="searchTable()" class="w-100" placeholder="Search here">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="">Filter by kelas</label>
+                                <select name="kelas_id" id="exam_kelas_id" class="form-control filter-select" required>
+                                    <option value="">Select Kelas</option>
+                                    @if (count($kelas) > 0)
+                                        @foreach ($kelas as $item)
+                                            <option value="{{ $item->id }}">{{ $item->class }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="">Filter by Mata Pelajaran</label>
+                                <select name="subject_id" id="exam_subject_id" class="form-control" required>
+                                    <option value="">Select Subject</option>
+                                    @if (count($subjects) > 0)
+                                        @foreach ($subjects as $subject)
+                                            <option value="{{ $subject->id }}">{{ $subject->subject }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
                         </div>
 
                         <table class="table table-bordered table-striped" id="example2 questionsTable">
                             <thead>
                                 <th>Pilih</th>
+                                <th>Kelas</th>
                                 <th>Mata Pelajaran</th>
                                 <th>Pertanyaan</th>
                             </thead>
@@ -338,9 +357,7 @@
             </div>
         </div>
     </div>
-
 </section>
-
 <script>
     $(document).ready(function () {
         $('#createExam').submit(function (e) {
@@ -440,29 +457,31 @@
                 url: "{{ route('getQuestions') }}",
                 type: "GET",
                 data: {exam_id: id},
-                success:function(data) {
+                success: function(data) {
                     if (data.success == true) {
-                        console.log(data)
                         var questions = data.data;
                         var html = '';
                         if (questions.length > 0) {
-                            for(let i=0; i<questions.length; i++){
-                                html +=`
+                            for (let i = 0; i < questions.length; i++) {
+                                html += `
                                     <tr>
                                         <td>
-                                            <input type="checkbox" value="`+questions[i]['id']+`" name="questions_ids[]">
+                                            <input type="checkbox" value="${questions[i]['id']}" name="questions_ids[]">
                                         </td>
                                         <td>
-                                            `+questions[i]['subjects']+`
+                                            ${questions[i]['kelas']}
                                         </td>
                                         <td>
-                                            `+questions[i]['questions']+`
+                                            ${questions[i]['subject_name']}
+                                        </td>
+                                        <td>
+                                            ${questions[i]['questions']}
                                         </td>
                                     </tr>
                                 `;
                             }
                         } else {
-                            html +=`
+                            html += `
                                 <tr>
                                     <td colspan='2'>Questions not available</td>
                                 </tr>
@@ -495,7 +514,6 @@
         });
 
         // see Questions
-
         $(document).on('click', '.seeQuestion', function() {
             var id = $(this).attr('data-id');
 
@@ -576,28 +594,53 @@
                 }
             });
         });
-
     });
 </script>
 <script>
-    function searchTable(){
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById('search');
-        filter = input.value.toUpperCase();
-        table = document.getElementById('questionsTable');
-        tr = table.getElementsByTagName("tr");
+    document.addEventListener('DOMContentLoaded', function() {
+        function filterTable() {
+            var filterKelas = document.getElementById('filterKelas').value.toUpperCase();
+            var filterSubject = document.getElementById('filterSubject').value.toUpperCase();
 
-        for(i=0; i < tr.length; i++){
-            td = tr[i].getElementsByTagName("td")[1];
-            if(td){
-                txtValue = td.textContent || td.innerText;
-                if(txtValue.toUpperCase().indexOf(filter) > -1){
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+            var table = document.getElementById('questionsTable');
+
+            if (table) {
+                var tr = table.getElementsByTagName("tr");
+
+                for (var i = 0; i < tr.length; i++) {
+                    var tdKelas = tr[i].getElementsByTagName("td")[1];
+                    var tdSubject = tr[i].getElementsByTagName("td")[2];
+
+                    console.log('tdKelas:', txtValueKelas);
+                    console.log('tdSubject:', txtValueSubject);
+
+                    if (tdKelas && tdSubject) {
+                        var txtValueKelas = tdKelas.textContent || tdKelas.innerText;
+                        var txtValueSubject = tdSubject.textContent || tdSubject.innerText;
+
+                        if (
+                            (filterKelas === '' || txtValueKelas.toUpperCase().indexOf(filterKelas) > -1) &&
+                            (filterSubject === '' || txtValueSubject.toUpperCase().indexOf(filterSubject) > -1)
+                        ) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
                 }
             }
         }
-    }
+
+        var filterKelasElement = document.getElementById('filterKelas');
+        var filterSubjectElement = document.getElementById('filterSubject');
+
+        if (filterKelasElement && filterSubjectElement) {
+            filterKelasElement.addEventListener('change', filterTable);
+            filterSubjectElement.addEventListener('change', filterTable);
+        } else {
+            console.error('One or both of the select elements not found.');
+        }
+    });
 </script>
+
 @endsection
