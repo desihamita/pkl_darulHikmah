@@ -34,7 +34,7 @@ class AdminController extends Controller
             $subjects = $subjects->where('subject', 'ILIKE', '%' . $request->get('search') . '%');
         }
 
-        $subjects = $subjects->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->get();
+        $subjects = $subjects->orderBy('id', 'desc')->get();
 
         return view('admin.subject-dashboard', compact(
             'subjects',
@@ -81,7 +81,7 @@ class AdminController extends Controller
             $kelas = $kelas->where('class', 'ILIKE', '%' . $request->get('search') . '%');
         }
 
-        $kelas = $kelas->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->get();
+        $kelas = $kelas->orderBy('id', 'desc')->get();
 
         return view('admin.kelas-dashboard', compact('kelas', 'request'));
     }
@@ -136,8 +136,7 @@ class AdminController extends Controller
         }
 
         $exams = $exams->with('subjects', 'kelas')
-                   ->orderBy('created_at', 'desc')
-                   ->orderBy('updated_at', 'desc')
+                   ->orderBy('id', 'desc')
                    ->get();
 
         return view('admin.exam-dashboard', compact(
@@ -156,7 +155,7 @@ class AdminController extends Controller
                 'kelas_id' => $request->kelas_id,
                 'time' => $request->time,
                 'date' => $request->date,
-                'attempt' => $request->attempt
+                'pass_marks' => $request->pass_marks
             ]);
 
             return response()->json(['success' => true, 'msg' => 'Exam Added Successfully!']);
@@ -180,7 +179,7 @@ class AdminController extends Controller
             $exam->kelas_id = $request->kelas_id;
             $exam->date = $request->date;
             $exam->time = $request->time;
-            $exam->attempt = $request->attempt;
+            $exam->pass_marks = $request->pass_marks;
             $exam->save();
 
             return response()->json(['success' => true, 'msg' => 'Exam updated Successfully!']);
@@ -195,7 +194,6 @@ class AdminController extends Controller
 
         return response()->json(['status' => $exam->status]);
     }
-
     public function deleteExam(Request $request){
         try {
             Exam::where('id', $request->exam_id)->delete();
@@ -223,8 +221,7 @@ class AdminController extends Controller
         }
 
         $questions = $questions->with('answers', 'kelas', 'subjects')
-                                ->orderBy('created_at', 'desc')
-                                ->orderBy('updated_at', 'desc')
+                                ->orderBy('id', 'desc')
                                 ->get();
 
         return view('admin.qna-dashboard', compact(
@@ -358,8 +355,7 @@ class AdminController extends Controller
 
         $students = $students->with('kelas')
                              ->where('is_admin', 0)
-                             ->orderBy('created_at', 'desc')
-                             ->orderBy('updated_at', 'desc')
+                             ->orderBy('id', 'desc')
                              ->get();
 
         return view('admin.student-dashboard', compact(
@@ -486,25 +482,6 @@ class AdminController extends Controller
         try {
             QnaExam::where('id', $request->id)->delete();
             return response()->json(['success' => true, 'msg' => 'Questions deleted successfully!']);
-        } catch (\Exception $ex) {
-            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
-        }
-    }
-
-    // Marks
-    public function loadMarks(){
-        $exams = Exam::with('qnaExams')->orderBy('created_at', 'desc')
-                                       ->orderBy('updated_at', 'desc')
-                                       ->get();
-        return view('admin.marks-dashboard', compact('exams'));
-    }
-    public function updateMarks(Request $request){
-        try {
-            Exam::where('id', $request->exam_id)->update([
-                'marks' => $request->marks,
-                'pass_marks' => $request->pass_marks
-            ]);
-            return response()->json(['success' => true, 'msg' => 'Marks updated successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }

@@ -44,7 +44,7 @@
                         <th>Kelas</th>
                         <th>Tanggal Ujian</th>
                         <th>Waktu Ujian</th>
-                        <th>Percobaan</th>
+                        <th>KKM</th>
                         <th>Tambah Pertanyaan</th>
                         <th>Lihat Pertanyaan</th>
                         <th>Status</th>
@@ -68,7 +68,7 @@
                                 </td>
                                 <td>{{ $exam->date }}</td>
                                 <td>{{ $exam->time }} hrs</td>
-                                <td>{{ $exam->attempt }} </td>
+                                <td>{{ $exam->pass_marks }} </td>
                                 <td>
                                     <a href="" class="addQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModal">Add Question</a>
                                 </td>
@@ -168,8 +168,8 @@
                         <input type="time" name="time" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="attempt">Jumlah Percobaan Ujian</label>
-                        <input type="number" name="attempt" class="form-control" required>
+                        <label for="pass_marks">KKM</label>
+                        <input type="text" name="pass_marks" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -230,8 +230,8 @@
                         <input type="time" name="time" class="form-control" id="exam_time" required>
                     </div>
                     <div class="form-group">
-                        <label for="attempt">Jumlah Percobaan</label>
-                        <input type="number" name="attempt" class="form-control" id="exam_attempt" required>
+                        <label for="pass_marks">KKM</label>
+                        <input type="text" name="pass_marks" class="form-control" id="exam_pass_marks" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -398,7 +398,7 @@
                         $("#exam_kelas_id").val(exam[0].kelas_id);
                         $("#exam_time").val(exam[0].time);
                         $("#exam_date").val(exam[0].date);
-                        $("#exam_attempt").val(exam[0].attempt);
+                        $("#exam_pass_marks").val(exam[0].pass_marks);
                     } else {
                         alert(data.msg);
                     }
