@@ -286,7 +286,7 @@
                         <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="">Filter by kelas</label>
-                                <select name="kelas_id" id="exam_kelas_id" class="form-control filter-select" required>
+                                <select name="filter_kelas_id" id="filter_kelas_id" class="form-control filter-select" required>
                                     <option value="">Select Kelas</option>
                                     @if (count($kelas) > 0)
                                         @foreach ($kelas as $item)
@@ -297,7 +297,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="">Filter by Mata Pelajaran</label>
-                                <select name="subject_id" id="exam_subject_id" class="form-control" required>
+                                <select name="filter_subject_id" id="filter_subject_id" class="form-control filter-select" required>
                                     <option value="">Select Subject</option>
                                     @if (count($subjects) > 0)
                                         @foreach ($subjects as $subject)
@@ -448,7 +448,7 @@
             });
         });
 
-        // add questions
+        // add Questions
         $(document).on('click', '.addQuestion', function() {
             var id = $(this).attr('data-id');
             $('#addExamId').val(id);
@@ -511,6 +511,59 @@
                     }
                 }
             });
+        });
+
+        //filter data kelas dan subject
+        function updateTable(classId, subjectId) {
+            $.ajax({
+                url: "{{ route('getQuestions') }}",
+                type: "GET",
+                data: {
+                    exam_id: $('#addExamId').val(),
+                    kelas_id: classId,
+                    subject_id: subjectId
+                },
+                success: function (data) {
+                    var questions = data.data;
+                    var html = '';
+
+                    if (questions.length > 0) {
+                        for (let i = 0; i < questions.length; i++) {
+                            html += `
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="${questions[i]['id']}" name="questions_ids[]">
+                                    </td>
+                                    <td>${questions[i]['kelas']}</td>
+                                    <td>${questions[i]['subject_name']}</td>
+                                    <td>${questions[i]['questions']}</td>
+                                </tr>
+                            `;
+                        }
+                    } else {
+                        html += `
+                            <tr>
+                                <td colspan="4">No questions available for the selected class and subject</td>
+                            </tr>
+                        `;
+                    }
+
+                    $('.addBody').html(html);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error("Error fetching questions:", errorThrown);
+                },
+            });
+        }
+        $('#filter_kelas_id, #filter_subject_id').change(function () {
+            var classId = $('#filter_kelas_id').val();
+            var subjectId = $('#filter_subject_id').val();
+            updateTable(classId, subjectId);
+        });
+        $('#addQnaModal').on('show.bs.modal', function () {
+            var classId = $('#filter_kelas_id').val();
+            var subjectId = $('#filter_subject_id').val();
+            updateTable(classId, subjectId);
         });
 
         // see Questions
@@ -594,52 +647,6 @@
                 }
             });
         });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function filterTable() {
-            var filterKelas = document.getElementById('filterKelas').value.toUpperCase();
-            var filterSubject = document.getElementById('filterSubject').value.toUpperCase();
-
-            var table = document.getElementById('questionsTable');
-
-            if (table) {
-                var tr = table.getElementsByTagName("tr");
-
-                for (var i = 0; i < tr.length; i++) {
-                    var tdKelas = tr[i].getElementsByTagName("td")[1];
-                    var tdSubject = tr[i].getElementsByTagName("td")[2];
-
-                    console.log('tdKelas:', txtValueKelas);
-                    console.log('tdSubject:', txtValueSubject);
-
-                    if (tdKelas && tdSubject) {
-                        var txtValueKelas = tdKelas.textContent || tdKelas.innerText;
-                        var txtValueSubject = tdSubject.textContent || tdSubject.innerText;
-
-                        if (
-                            (filterKelas === '' || txtValueKelas.toUpperCase().indexOf(filterKelas) > -1) &&
-                            (filterSubject === '' || txtValueSubject.toUpperCase().indexOf(filterSubject) > -1)
-                        ) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
-                        }
-                    }
-                }
-            }
-        }
-
-        var filterKelasElement = document.getElementById('filterKelas');
-        var filterSubjectElement = document.getElementById('filterSubject');
-
-        if (filterKelasElement && filterSubjectElement) {
-            filterKelasElement.addEventListener('change', filterTable);
-            filterSubjectElement.addEventListener('change', filterTable);
-        } else {
-            console.error('One or both of the select elements not found.');
-        }
     });
 </script>
 

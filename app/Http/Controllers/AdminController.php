@@ -434,25 +434,29 @@ class AdminController extends Controller
                         'question_id' => $question->id,
                     ])->get();
 
-                    if (count($qnaExam) == 0) {
+                    if (
+                        count($qnaExam) == 0 &&
+                        ($request->kelas_id == null || $question->kelas_id == $request->kelas_id) &&
+                        ($request->subject_id == null || $question->subject_id == $request->subject_id)
+                    ) {
                         $data[$counter]['id'] = $question->id;
                         $data[$counter]['questions'] = $question->question;
-                        $data[$counter]['subjects'] = $question->subject_id;
 
                         $subject = $subjects->firstWhere('id', $question->subject_id);
-                        $kelas = $kelas->firstWhere('id', $question->kelas_id);
+                        $kelasData = $kelas->firstWhere('id', $question->kelas_id);
 
                         $data[$counter]['subject_name'] = $subject ? $subject->subject : 'tidak ada mata pelajaran';
-                        $data[$counter]['kelas'] = $kelas ? $kelas->class : 'tidak ada kelas';
+                        $data[$counter]['kelas'] = $kelasData ? $kelasData->class : 'tidak ada kelas';
 
                         $counter++;
                     }
                 }
+
                 return response()->json(['success'=> true,'msg'=> 'Questions data!', 'data' => $data]);
             } else {
                 return response()->json(['success'=> false,'msg'=> 'Questions Not Found!']);
             }
-                    } catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
