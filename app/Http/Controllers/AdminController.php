@@ -166,8 +166,7 @@ class AdminController extends Controller
     }
     public function getExamDetail($id){
         try {
-            $exam = Exam::with('subjects')->find($id);
-
+            $exam = Exam::where('id', $id)->get();
             return response()->json(['success' => true, 'data' => $exam]);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
