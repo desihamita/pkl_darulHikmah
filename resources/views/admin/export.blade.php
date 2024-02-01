@@ -59,35 +59,33 @@
 </head>
 <body>
     <h1>Hasil Ujian</h1>
+    <dl>
+        <dt>NIS</dt>
+        <dd>{{ $user->nis }}</dd><br>
 
-    @foreach ($attempts as $attempt)
-        <dl>
-            <dt>Nama</dt>
-            <dd>{{ $attempt['user_name'] }}</dd><br>
-            
-            <dt>Kelas</dt>
-            <dd>{{ $attempt['kelas'] }}</dd><br>
+        <dt>Nama</dt>
+        <dd>{{ $user->name }}</dd><br>
 
-            <dt>Semester</dt>
-            <dd>{{ $attempt['semester'] }}</dd><br>
+        <dt>Kelas</dt>
+        <dd>{{ $user->kelas['class'] ?? '' }}</dd><br>
 
-            <dt>Nama Ujian</dt>
-            <dd>{{ $attempt['exam_name'] }}</dd>
-        </dl>
-
-        <table id="customers">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Mata Pelajaran</th>
-                    <th>KKM</th>
-                    <th>Benar</th>
-                    <th>Salah</th>
-                    <th>Nilai</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
+        <dt>Semester</dt>
+        <dd>{{ $user->kelas['semester'] ?? '' }}</dd><br>
+    </dl>
+    <table id="customers">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Mata Pelajaran</th>
+                <th>KKM</th>
+                <th>Benar</th>
+                <th>Salah</th>
+                <th>Nilai</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($attempts as $attempt)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $attempt['mapel'] }}</td>
@@ -97,9 +95,8 @@
                     <td class="total-score" data-attempt-id="{{ $attempt['id'] }}">{{ $attempt['score'] }}</td>
                     <td>{{ $attempt['status'] }}</td>
                 </tr>
-            </tbody>
-        </table>
-    @endforeach
-
+            @endforeach
+        </tbody>
+    </table>
 </body>
 </html>

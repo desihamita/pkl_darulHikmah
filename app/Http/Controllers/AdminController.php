@@ -551,8 +551,21 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function exportPdf(){
-        $attempts = ExamAttempt::with(['user', 'exam', 'examAnswer'])->get();
+    public function exportPdf(Request $request){
+        $search = $request->get('search');
+
+        $attempts = ExamAttempt::with(['user', 'exam', 'examAnswer'])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('user', function ($userQuery) use ($search) {
+                    $userQuery->where('name', 'like', '%' . $search . '%');
+                });
+            })
+            ->get();
+
+        $user = $attempts->first()->user;
+        $kelas = $user->kelas->class ?? '';
+        $semester = $user->kelas->semester ?? '';
+
         $pdfData = [];
 
         foreach ($attempts as $attempt) {
@@ -564,9 +577,6 @@ class AdminController extends Controller
             $totalQuestions = $attempt->examAnswer->pluck('question_id')->unique()->count();
             $totalScore = $totalQuestions > 0 ? ($correctAnswers * 100) / $totalQuestions : 0;
 
-            $kelas = $attempt->user->kelas->class ?? '';
-            $semester = $attempt->user->kelas->semester ?? '';
-            $kelas = $attempt->user->kelas->class ?? '';
             $mapel = $attempt->exam->subjects->subject ?? '';
 
             $pdfData[] = [
@@ -584,7 +594,8 @@ class AdminController extends Controller
             ];
         }
 
-        $pdf = PDF::loadView('admin.export', ['attempts' => $pdfData]);
+        $pdf = PDF::loadView('admin.export', ['attempts' => $pdfData, 'user' => $user]);
         return $pdf->download('exported_data.pdf');
     }
+
 }

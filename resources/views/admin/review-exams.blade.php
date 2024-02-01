@@ -11,7 +11,7 @@
                 <div class="card card-outline">
                     <div class="card-header">
                         <h3 class="card-title mt-2">
-                            <a href="{{ route('exportPdf') }}" class="btn btn-success">
+                            <a href="{{ route('exportPdf', ['search' => $request->get('search')]) }}" class="btn btn-success">
                                 Export Data
                             </a>
                         </h3>
@@ -40,7 +40,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
-                                    <th>Exam Name</th>
+                                    <th>Mata Pelajaran</th>
                                     <th>KKM</th>
                                     <th>Benar</th>
                                     <th>Salah</th>
@@ -55,7 +55,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $attempt->user->name }}</td>
-                                        <td>{{ $attempt->exam->exam_name }}</td>
+                                        <td>{{ $attempt->exam->subjects->subject }}</td>
                                         <td>{{ $attempt->exam->pass_marks }}</td>
                                         <td class="total-correct-answers" data-attempt-id="{{ $attempt->id }}"></td>
                                         <td class="total-incorrect-answers" data-attempt-id="{{ $attempt->id }}"></td>
@@ -89,7 +89,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
-                                    <th>Exam Name</th>
+                                    <th>Mata Pelajaran</th>
                                     <th>Benar</th>
                                     <th>Salah</th>
                                     <th>KKM</th>
