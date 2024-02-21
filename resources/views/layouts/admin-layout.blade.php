@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Examination</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo[1].png') }}">
+    <title>Examination</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 

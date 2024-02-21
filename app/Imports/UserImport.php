@@ -21,6 +21,7 @@ class UserImport implements ToCollection, WithHeadingRow
 
             if ($kelas != null) {
                 User::create([
+                    'no_peserta' => $row['no_peserta'],
                     'name' => $row['nama'],
                     'nis' => $row['nis'],
                     'email' => $row['email'],

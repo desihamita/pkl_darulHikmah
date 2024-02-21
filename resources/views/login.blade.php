@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo[1].png') }}">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log in</title>
 
@@ -13,9 +15,11 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-success">
     <div class="card-header text-center">
-        <a href="{{ url('/') }}" class="h1"><b>Darul</b>Hikmah</a>
+        <div class="login-logo">
+            <a href="{{ url('/') }}" class="h1"><img src="{{asset('logo.png')}}" alt="logo" width="150"></a>
+        </div>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
@@ -48,7 +52,7 @@
         @endif
         <div class="row">
           <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" class="btn btn-success btn-block">Sign In</button>
           </div>
         </div>
       </form>

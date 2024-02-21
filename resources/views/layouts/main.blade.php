@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@yield('title')</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('logo[1].png') }}"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title')</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
@@ -35,7 +37,7 @@
         <li class="nav-item">
             <div class="user-panel d-flex">
                 <div class="info">
-                <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+                    <a href="#" class="d-block">{{ Auth::user()->name }}<i class="far fa-user m-2 text-black-50"></i></a>
                 </div>
             </div>
         </li>
@@ -90,7 +92,7 @@
       });
     });
 </script>
-  
+
 <script src="{{ asset('js/popper.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>

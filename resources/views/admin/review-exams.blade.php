@@ -25,7 +25,7 @@
                                             placeholder="Search" value="{{ $request->get('search') }}">
 
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-success">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </div>
@@ -90,9 +90,9 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>Mata Pelajaran</th>
+                                    <th>KKM</th>
                                     <th>Benar</th>
                                     <th>Salah</th>
-                                    <th>KKM</th>
                                     <th>Nilai</th>
                                     <th>Status</th>
                                     <th>Review</th>

@@ -11,7 +11,7 @@
           <div class="card card-outline">
             <div class="card-header">
               <h3 class="card-title mt-2">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-create">
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
                       Tambah Data
                   </button>
               </h3>
@@ -24,7 +24,7 @@
                             <input type="text" name="search" class="form-control float-right" placeholder="Search" value="{{ $request->get('search') }}">
 
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-success">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -49,7 +49,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->subject }}</td>
                                 <td>
-                                    <button class="btn btn-info updateButton" data-id="{{ $item->id }}" data-subject="{{ $item->subject }}" data-toggle="modal" data-target="#modal-update">Update</button>
+                                    <button class="btn btn-success updateButton" data-id="{{ $item->id }}" data-subject="{{ $item->subject }}" data-toggle="modal" data-target="#modal-update">Update</button>
 
                                     <button class="btn btn-danger deleteButton" data-id="{{ $item->id }}" data-subject="{{ $item->subject }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
                                 </td>
@@ -57,7 +57,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="3">Mata Pelajaran Tidak Ditemukan!</td>
+                            <td colspan="3" class="text-center">Mata Pelajaran Tidak Ditemukan!</td>
                         </tr>
                     @endif
                 </tbody>
@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
                 </div>
             </form>
           </div>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-success">Edit</button>
                     </div>
                 </form>
             </div>
@@ -144,7 +144,7 @@
                 <form id="deleteSubject">
                     @csrf
                     <div class="modal-body">
-                        <p>Are you sure you want to delete subject?</p>
+                        <p>Apakah Anda yakin ingin menghapus Mata Pelajaran?</p>
                         <input type="hidden" name="id" id="delete_subject_id">
                     </div>
                     <div class="modal-footer">

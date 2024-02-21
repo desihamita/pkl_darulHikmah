@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="card card-info">
+                    <div class="card card-success">
                         <h4 class="card-header text-center time">{{ $exam[0]['time'] }}</h4>
                     </div>
                     <div class="card">
@@ -19,7 +19,7 @@
                         <div class="card-body">
                             <div class="question-buttons">
                                 @foreach ($qna as $item)
-                                <button type="button" class="btn btn-outline-primary btn-question" data-question-id="{{ $item['question']['id'] }}">
+                                <button type="button" class="btn btn-outline-success btn-question" data-question-id="{{ $item['question']['id'] }}">
                                     {{ $loop->iteration }}
                                 </button>
                                 @endforeach
@@ -31,7 +31,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">
-                                Soal
+                                Soal Ujian
                             </h5>
                         </div>
                         <div class="card-body">
@@ -52,19 +52,26 @@
                                             <input type="hidden" name="ans_{{ $item['question']['id'] }}"
                                                 id="ans_{{ $item['question']['id'] }}">
 
-                                            @foreach ($item['question']['answers'] as $answer)
-                                            <p>
-                                                <input type="radio" name="radio_{{ $item['question']['id'] }}" value="{{ $answer['id'] }}" data-id="{{ $item['question']['id'] }}" class="select_ans ml-5">
+                                            @php $alphabet = range('A', 'Z'); @endphp
 
-                                                {{ $answer['answer']}}
-                                            </p>
+                                            @foreach ($item['question']['answers'] as $key => $answer)
+                                                @if (isset($alphabet[$key]))
+                                                    @php $letter = $alphabet[$key]; @endphp
+                                                @else
+                                                    @php $letter = ''; @endphp
+                                                @endif
+
+                                                <p>
+                                                    <input type="radio" name="radio_{{ $item['question']['id'] }}" value="{{ $answer['id'] }}" data-id="{{ $item['question']['id'] }}" class="select_ans ml-5">
+                                                    {{ $letter }}. {{ $answer['answer']}}
+                                                </p>
                                             @endforeach
                                         </div>
                                         @endforeach
                                     </div>
                                     <div class="text-center">
-                                        <button type="button" class="btn btn-info btn-previous" onclick="prevQuestion()" style="display: none;">Previous</button>
-                                        <button type="button" class="btn btn-info btn-next" onclick="nextQuestion()">Next</button>
+                                        <button type="button" class="btn btn-success btn-previous" onclick="prevQuestion()" style="display: none;">Previous</button>
+                                        <button type="button" class="btn btn-success btn-next" onclick="nextQuestion()">Next</button>
 
                                         <input type="submit" class="btn btn-primary btn-submit" style="display: none;">
                                     </div>

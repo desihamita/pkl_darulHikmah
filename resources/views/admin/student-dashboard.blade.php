@@ -11,7 +11,7 @@
           <div class="card card-outline">
             <div class="card-header">
               <h3 class="card-title mt-2">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-create">
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
                     Tambah Data
                   </button>
                   <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-import">
@@ -27,7 +27,7 @@
                             <input type="text" name="search" class="form-control float-right" placeholder="Search" value="{{ $request->get('search') }}">
 
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-success">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -41,6 +41,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>No Peserta</th>
                         <th>NIS</th>
                         <th>Nama</th>
                         <th>kelas</th>
@@ -53,6 +54,7 @@
                         @foreach ($students as $student)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $student->no_peserta }}</td>
                                 <td>{{ $student->nis }}</td>
                                 <td>{{ $student->name }}</td>
                                 <td>
@@ -64,7 +66,7 @@
                                 </td>
                                 <td>{{ $student->email }}</td>
                                 <td>
-                                    <button class="btn btn-info updateButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-email="{{ $student->email }}" data-nis="{{ $student->nis }}" data-kelas="{{ $student->kelas_id }}" data-toggle="modal" data-target="#modal-update">Update</button>
+                                    <button class="btn btn-success updateButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-email="{{ $student->email }}" data-no-peserta="{{ $student->no_peserta }}" data-nis="{{ $student->nis }}" data-kelas="{{ $student->kelas_id }}" data-toggle="modal" data-target="#modal-update">Update</button>
 
                                     <button class="btn btn-danger deleteButton" data-id="{{ $student->id }}" data-student="{{ $student->name }}" data-kelas="{{ $student->kelas_id }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
                                 </td>
@@ -72,13 +74,14 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5" class="text-center">Siswa/I Tidak Ditemukan!</td>
+                            <td colspan="7" class="text-center">Siswa/I Tidak Ditemukan!</td>
                         </tr>
                     @endif
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>No</th>
+                        <th>No Peserta</th>
                         <th>NIS</th>
                         <th>Nama</th>
                         <th>kelas</th>
@@ -107,12 +110,16 @@
             @csrf
             <div class="card-body">
                 <div class="form-group">
+                    <label for="no_peserta">No Peserta</label>
+                    <input type="text" class="form-control" name="no_peserta" placeholder="Enter No Peserta" required>
+                </div>
+                <div class="form-group">
                     <label for="NIS">NIS</label>
-                    <input type="text" class="form-control" name="nis" placeholder="Enter Student NIS" required>
+                    <input type="text" class="form-control" name="nis" placeholder="Enter NIS" required>
                 </div>
                 <div class="form-group">
                     <label for="Nama">Nama</label>
-                    <input type="text" class="form-control" name="name" placeholder="Enter Student Name" required>
+                    <input type="text" class="form-control" name="name" placeholder="Enter Name" required>
                 </div>
                 <div class="form-group">
                     <label for="kelas">Kelas</label>
@@ -127,16 +134,16 @@
                 </div>
                 <div class="form-group">
                     <label for="Email">Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="Enter Student Email" required>
+                    <input type="text" class="form-control" name="email" placeholder="Enter Email" required>
                 </div>
                 <div class="form-group">
                     <label for="Password">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Enter Student Password" required>
+                    <input type="password" class="form-control" name="password" placeholder="Enter Password" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-success">Save changes</button>
             </div>
         </form>
         </div>
@@ -156,35 +163,37 @@
             <div class="modal-body">
                 <form id="updateStudent">
                     @csrf
-                    <div class="card-body">
-                        <input type="hidden" name="id" id="id">
-                        <div class="form-group">
-                            <label for="NIS">NIS</label>
-                            <input type="text" name="nis" id="nis"  placeholder="Enter Exam NIS" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="Nama">Nama</label>
-                            <input type="text" name="nama" id="nama" placeholder="Enter Exam Name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="kelas">Kelas</label>
-                            <select name="kelas_id" id="kelas_id" class="form-control" required>
-                                <option value="">Select Kelas</option>
-                                @if (count($kelas) > 0)
-                                    @foreach ($kelas as $item)
-                                        <option value="{{ $item->id }}">{{ $item->class }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="Email">Email</label>
-                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter Your Email" required>
-                        </div>
+                    <input type="hidden" name="id" id="id">
+                    <div class="form-group">
+                        <label for="no_peserta">No Peserta</label>
+                        <input type="text" name="no_peserta" id="no_peserta"  placeholder="Enter No Peserta" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="NIS">NIS</label>
+                        <input type="text" name="nis" id="nis"  placeholder="Enter NIS" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Nama">Nama</label>
+                        <input type="text" name="nama" id="nama" placeholder="Enter Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kelas">Kelas</label>
+                        <select name="kelas_id" id="kelas_id" class="form-control" required>
+                            <option value="">Select Kelas</option>
+                            @if (count($kelas) > 0)
+                                @foreach ($kelas as $item)
+                                    <option value="{{ $item->id }}">{{ $item->class }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter Your Email" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-success">Edit</button>
                     </div>
                 </form>
             </div>
@@ -206,7 +215,7 @@
                 <form id="deleteStudent">
                     @csrf
                     <div class="modal-body">
-                        <p>Are you sure you want to delete Siswa/i?</p>
+                        <p>Apakah anda yakin ingin menghapus siswa?</p>
                         <input type="hidden" name="id" id="delete_student_id">
                     </div>
                     <div class="modal-footer">
@@ -269,12 +278,14 @@
         // Update subject
         $('.updateButton').click(function() {
             var id = $(this).attr('data-id');
+            var no_peserta = $(this).attr('data-no-peserta');
             var nis = $(this).attr('data-nis');
             var name = $(this).attr('data-student');
             var email = $(this).attr('data-email');
             var kelas_id = $(this).attr('data-kelas');
 
             $("#nis").val(nis);
+            $("#no_peserta").val(no_peserta);
             $("#nama").val(name);
             $("#email").val(email);
             $("#kelas_id").val(kelas_id);

@@ -14,14 +14,17 @@
                 @foreach ($exams as $item)
                     @if ($item->status == true && $item->kelas->class == $userClassId)
                         <div class="col-lg-5">
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h5 class="card-title m-0">{{ $item->exam_name }}</h5>
-                                </div>
+                            <div class="card card-success card-outline">
                                 <div class="card-body">
                                     <form method="post" action="{{ route('check.token') }}" >
                                         @csrf
                                         <dl class="row">
+                                            <dt class="col-sm-4">No Peserta </dt>
+                                            <dd class="col-sm-8">: {{ Auth::user()->no_peserta }}</dd>
+
+                                            <dt class="col-sm-4">Nama Peserta </dt>
+                                            <dd class="col-sm-8">: {{ Auth::user()->name }}</dd>
+
                                             <dt class="col-sm-4">Mata Pelajaran</dt>
                                             <dd class="col-sm-8">: {{ $item->subjects->subject }}</dd>
 
@@ -41,7 +44,7 @@
                                             <dd class="col-sm-8"><input type="text" name="token" id="token" class="form-control"></dd>
                                         </dl>
                                         <div class="d-grid mt-3 d-md-flex justify-content-md-end">
-                                            <button class="btn btn-primary" type="submit">Mulai</button>
+                                            <button class="btn btn-success" type="submit">Mulai</button>
                                         </div>
                                     </form>
                                     <div id="notif">

@@ -11,7 +11,7 @@
           <div class="card card-outline">
             <div class="card-header">
               <h3 class="card-title mt-2">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-create">
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
                     Tambah Data
                   </button>
               </h3>
@@ -24,7 +24,7 @@
                             <input type="text" name="search" class="form-control float-right" placeholder="Search" value="{{ $request->get('search') }}">
 
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-success">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -85,7 +85,7 @@
                                 <td>
                                     <button class="btn btn-warning updateStatusButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-status="{{ $exam->status }}" >Ubah Status</button>
 
-                                    <button class="btn btn-info updateButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#modal-update">Update</button>
+                                    <button class="btn btn-success updateButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#modal-update">Update</button>
 
                                     <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
                                 </td>
@@ -93,7 +93,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5">Ujian Tidak Ditemukan!</td>
+                            <td colspan="12" class="text-center">Ujian Tidak Ditemukan!</td>
                         </tr>
                     @endif
                 </tbody>
@@ -174,7 +174,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-success">Save changes</button>
                 </div>
             </form>
         </div>
@@ -236,7 +236,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-success">Edit</button>
                 </div>
             </form>
           </div>
@@ -322,7 +322,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-success">Save changes</button>
                     </div>
                 </form>
             </div>

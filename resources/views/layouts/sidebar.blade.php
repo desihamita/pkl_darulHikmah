@@ -1,9 +1,11 @@
 <aside class="main-sidebar sidebar-light-primary elevation-4">
-    <a href="{{asset('index3.html')}}" class="brand-link">
-      <img src="{{asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: .8">
-      <span class="brand-text font-weight-light font-weight-bold">DarulHikmah</span>
+    <a href="{{asset('index3.html')}}" class="brand-link" style="display: flex; align-items: center;">
+        <img src="{{asset('logo[1].png')}}" alt="Logo" class="brand-image" style="opacity: .8; width: 30px; height: 50px;">
+        <span style="flex: 1; display: flex; flex-direction: column; font-size:14px;">
+          <strong>SMA Plus</strong>
+          <span>DarulHikmah</span>
+        </span>
     </a>
-
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">

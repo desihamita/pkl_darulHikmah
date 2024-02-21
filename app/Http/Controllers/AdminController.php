@@ -31,7 +31,8 @@ class AdminController extends Controller
         $subjects = Subject::query();
 
         if ($request->get('search')) {
-            $subjects = $subjects->where('subject', 'ILIKE', '%' . $request->get('search') . '%');
+            $searchTerm = '%' . strtolower($request->get('search')) . '%';
+            $subjects = $subjects->whereRaw('LOWER(subject) LIKE ?', [$searchTerm]);
         }
 
         $subjects = $subjects->orderBy('id', 'desc')->get();
@@ -78,7 +79,8 @@ class AdminController extends Controller
         $kelas = Kelas::query();
 
         if ($request->get('search')) {
-            $kelas = $kelas->where('class', 'ILIKE', '%' . $request->get('search') . '%');
+            $searchTerm = '%' . strtolower($request->get('search')) . '%';
+            $kelas = $kelas->whereRaw('LOWER(class) LIKE ?', [$searchTerm]);
         }
 
         $kelas = $kelas->orderBy('id', 'desc')->get();
@@ -119,88 +121,76 @@ class AdminController extends Controller
         }
     }
 
-    //Exam
-    public function examDashboard(Request $request){
-        $exams = Exam::query();
-        $subjects = Subject::all();
+    // students
+    public function studentDashboard(Request $request){
+        $students = User::query();
         $kelas = Kelas::all();
 
         if ($request->get('search')) {
-            $searchTerm = $request->get('search');
-            $exams->where(function ($query) use ($searchTerm) {
-                $query->where('exam_name', 'ILIKE', '%' . $searchTerm . '%')
-                    ->orWhereHas('subjects', function ($query) use ($searchTerm) {
-                        $query->where('subject', 'ILIKE', '%' . $searchTerm . '%');
-                    });
+            $searchTerm = '%' . $request->get('search') . '%';
+            $students = $students->where(function($query) use ($searchTerm) {
+                $query->where('name', 'LIKE', $searchTerm)
+                      ->orWhere('nis', 'LIKE', $searchTerm)
+                      ->orWhere('email', 'LIKE', $searchTerm);
             });
         }
 
-        $exams = $exams->with('subjects', 'kelas')
-                   ->orderBy('id', 'desc')
-                   ->get();
+        $students = $students->with('kelas')
+                             ->where('is_admin', 0)
+                             ->orderBy('id', 'desc')
+                             ->get();
 
-        return view('admin.exam-dashboard', compact(
-            'subjects',
-            'exams',
+        return view('admin.student-dashboard', compact(
+            'students',
             'kelas',
             'request'
         ));
     }
-    public function createExam(Request $request){
+    public function createStudent(Request $request){
         try {
-            $attempt = 1;
-            Exam::insert([
-                'token' => strtoupper(Str::random(8)),
-                'exam_name' => $request->exam_name,
-                'subject_id' => $request->subject_id,
+            User::insert([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
                 'kelas_id' => $request->kelas_id,
-                'time' => $request->time,
-                'date' => $request->date,
-                'pass_marks' => $request->pass_marks,
-                'attempt' => $attempt
+                'nis' => $request->nis,
+                'no_peserta' => $request->no_peserta
             ]);
 
-            return response()->json(['success' => true, 'msg' => 'Exam Added Successfully!']);
+            return response()->json(['success' => true, 'msg' => 'Student added Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function getExamDetail($id){
+    public function updateStudent(Request $request){
         try {
-            $exam = Exam::where('id', $id)->get();
-            return response()->json(['success' => true, 'data' => $exam]);
+            $student = User::find($request->id);
+            $student->no_peserta = $request->no_peserta;
+            $student->nis = $request->nis;
+            $student->name = $request->nama;
+            $student->kelas_id = $request->kelas_id;
+            $student->email = $request->email;
+            $student->save();
+
+            return response()->json(['success' => true, 'msg' => 'Student updated Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function updateExam(Request $request){
+    public function deleteStudent(Request $request){
         try {
-            $exam = Exam::find($request->exam_id);
-            $exam->exam_name = $request->exam_name;
-            $exam->subject_id = $request->subject_id;
-            $exam->kelas_id = $request->kelas_id;
-            $exam->date = $request->date;
-            $exam->time = $request->time;
-            $exam->pass_marks = $request->pass_marks;
-            $exam->save();
+            User::where('id', $request->id)->delete();
 
-            return response()->json(['success' => true, 'msg' => 'Exam updated Successfully!']);
+            return response()->json(['success' => true, 'msg' => 'Student deleted Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function updateStatus($id) {
-        $exam = Exam::findOrFail($id);
-        $exam->status = !$exam->status;
-        $exam->save();
-
-        return response()->json(['status' => $exam->status]);
-    }
-    public function deleteExam(Request $request){
+    public function importStudent(Request $request){
         try {
-            Exam::where('id', $request->exam_id)->delete();
+            Excel::import(new UserImport, $request->file('file'));
 
-            return response()->json(['success' => true, 'msg' => 'Exam deleted Successfully!']);
+            return response()->json(['success'=> true,'msg'=> 'Import Student Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
@@ -215,9 +205,9 @@ class AdminController extends Controller
         if ($request->get('search')) {
             $searchTerm = $request->get('search');
             $questions->where(function ($query) use ($searchTerm) {
-                $query->where('question', 'ILIKE', '%' . $searchTerm . '%')
+                $query->where('question', 'LIKE', '%' . $searchTerm . '%')
                     ->orWhereHas('subjects', function ($query) use ($searchTerm) {
-                        $query->where('subject', 'ILIKE', '%' . $searchTerm . '%');
+                        $query->where('subject', 'LIKE', '%' . $searchTerm . '%');
                     });
             });
         }
@@ -232,7 +222,6 @@ class AdminController extends Controller
             'kelas',
             'request'
         ));
-
     }
     public function createQna(Request $request){
         try {
@@ -344,71 +333,88 @@ class AdminController extends Controller
         }
     }
 
-    // students
-    public function studentDashboard(Request $request){
-        $students = User::query();
+    //Exam
+    public function examDashboard(Request $request){
+        $exams = Exam::query();
+        $subjects = Subject::all();
         $kelas = Kelas::all();
 
         if ($request->get('search')) {
-            $students = $students->where('name', 'ILIKE', '%' . $request->get('search') . '%')
-            ->orWhere('nis', 'ILIKE', '%' . $request->get('search') . '%')
-            ->orWhere('email', 'ILIKE', '%' . $request->get('search') . '%');
+            $searchTerm = $request->get('search');
+            $exams->where(function ($query) use ($searchTerm) {
+                $query->where('exam_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhereHas('subjects', function ($query) use ($searchTerm) {
+                        $query->where('subject', 'LIKE', '%' . $searchTerm . '%');
+                    });
+            });
         }
 
-        $students = $students->with('kelas')
-                             ->where('is_admin', 0)
-                             ->orderBy('id', 'desc')
-                             ->get();
+        $exams = $exams->with('subjects', 'kelas')
+                   ->orderBy('id', 'desc')
+                   ->get();
 
-        return view('admin.student-dashboard', compact(
-            'students',
+        return view('admin.exam-dashboard', compact(
+            'subjects',
+            'exams',
             'kelas',
             'request'
         ));
     }
-    public function createStudent(Request $request){
+    public function createExam(Request $request){
         try {
-            User::insert([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+            $attempt = 1;
+            Exam::insert([
+                'token' => strtoupper(Str::random(8)),
+                'exam_name' => $request->exam_name,
+                'subject_id' => $request->subject_id,
                 'kelas_id' => $request->kelas_id,
-                'nis' => $request->nis
+                'time' => $request->time,
+                'date' => $request->date,
+                'pass_marks' => $request->pass_marks,
+                'attempt' => $attempt
             ]);
 
-            return response()->json(['success' => true, 'msg' => 'Student added Successfully!']);
+            return response()->json(['success' => true, 'msg' => 'Exam Added Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function updateStudent(Request $request){
+    public function getExamDetail($id){
         try {
-            $student = User::find($request->id);
-            $student->nis = $request->nis;
-            $student->name = $request->nama;
-            $student->kelas_id = $request->kelas_id;
-            $student->email = $request->email;
-            $student->save();
-
-            return response()->json(['success' => true, 'msg' => 'Student updated Successfully!']);
+            $exam = Exam::where('id', $id)->get();
+            return response()->json(['success' => true, 'data' => $exam]);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function deleteStudent(Request $request){
+    public function updateExam(Request $request){
         try {
-            User::where('id', $request->id)->delete();
+            $exam = Exam::find($request->exam_id);
+            $exam->exam_name = $request->exam_name;
+            $exam->subject_id = $request->subject_id;
+            $exam->kelas_id = $request->kelas_id;
+            $exam->date = $request->date;
+            $exam->time = $request->time;
+            $exam->pass_marks = $request->pass_marks;
+            $exam->save();
 
-            return response()->json(['success' => true, 'msg' => 'Student deleted Successfully!']);
+            return response()->json(['success' => true, 'msg' => 'Exam updated Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }
     }
-    public function importStudent(Request $request){
-        try {
-            Excel::import(new UserImport, $request->file('file'));
+    public function updateStatus($id) {
+        $exam = Exam::findOrFail($id);
+        $exam->status = !$exam->status;
+        $exam->save();
 
-            return response()->json(['success'=> true,'msg'=> 'Import Student Successfully!']);
+        return response()->json(['status' => $exam->status]);
+    }
+    public function deleteExam(Request $request){
+        try {
+            Exam::where('id', $request->exam_id)->delete();
+
+            return response()->json(['success' => true, 'msg' => 'Exam deleted Successfully!']);
         } catch (\Exception $ex) {
             return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
         }

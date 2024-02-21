@@ -18,7 +18,6 @@ class Exam extends Model
         'date',
         'attempt',
         'token',
-        'marks',
         'kelas_id',
         'status',
     ];

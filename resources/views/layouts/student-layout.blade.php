@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo[1].png') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title')</title>
+
+  <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.ico') }}"/>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
@@ -13,11 +16,11 @@
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
 
-  <nav class="main-header navbar navbar-expand navbar-light bg-info">
+  <nav class="main-header navbar navbar-expand navbar-light bg-success">
     <div class="container">
       <a href="/" class="navbar-brand">
-        <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: .8">
-        <span class="brand-text font-weight-light" style="color: white; font-size: 24px;"> <strong>DarulHikmah</strong></span>
+        <img src="{{asset('logo[2].png')}}" alt="Logo" class="brand-image" style="opacity: .8">
+        <span class="brand-text font-weight-light" style="color: white; font-size: 24px;"> <strong>SMA PLus </strong>Darul Hikmah</span>
       </a>
 
       <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

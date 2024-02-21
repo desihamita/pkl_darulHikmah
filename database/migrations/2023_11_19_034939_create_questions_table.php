@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('question', 500);
             $table->integer('subject_id');
+            $table->integer('kelas_id');
             $table->text('explanation')->nullable();
             $table->timestamps();
         });

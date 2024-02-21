@@ -22,9 +22,10 @@ class User extends Authenticatable
         'nis',
         'email',
         'password',
-        'kelas_id'
+        'kelas_id',
+        'no_peserta'
     ];
-    
+
     public function kelas() {
         return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
     }

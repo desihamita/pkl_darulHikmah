@@ -21,6 +21,8 @@ return new class extends Migration
             $table->boolean('is_admin')->default(0);
             $table->string('password');
             $table->string('nis')->nullable();
+            $table->integer('kelas_id')->nullable();
+            $table->string('no_peserta')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('time');
             $table->date('date');
             $table->string('token');
-            $table->float('marks');
-            $table->boolean('status')->default('false');
-            $table->float('pass_maks')->default(0);
+            $table->integer('attempt')->default(1);
+            $table->boolean('status')->default(0);
+            $table->float('pass_marks')->default(0);
             $table->timestamps();
         });
     }
