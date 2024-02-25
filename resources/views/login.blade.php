@@ -15,10 +15,15 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-  <div class="card card-outline card-success">
+  <div class="card card-outline card-primary">
     <div class="card-header text-center">
         <div class="login-logo">
-            <a href="{{ url('/') }}" class="h1"><img src="{{asset('logo.png')}}" alt="logo" width="150"></a>
+            <a href="{{ url('/') }}" class="h1">
+                <img src="{{asset('logo[1].png')}}" alt="logo" width="80">
+                <strong style="flex: 1; display: flex; flex-direction: column;" class="mt-2 h4">
+                    SMA Plus Darul Hikmah
+                </strong>
+            </a>
         </div>
     </div>
     <div class="card-body">
@@ -52,7 +57,7 @@
         @endif
         <div class="row">
           <div class="col-12">
-            <button type="submit" class="btn btn-success btn-block">Sign In</button>
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
         </div>
       </form>

@@ -11,7 +11,7 @@
                 <div class="card card-outline">
                     <div class="card-header">
                         <h3 class="card-title mt-2">
-                            <a href="{{ route('exportPdf', ['search' => $request->get('search')]) }}" class="btn btn-success">
+                            <a href="{{ route('exportPdf', ['search' => $request->get('search')]) }}" class="btn btn-primary">
                                 Export Data
                             </a>
                         </h3>
@@ -25,7 +25,7 @@
                                             placeholder="Search" value="{{ $request->get('search') }}">
 
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-success">
+                                            <button type="submit" class="btn btn-primary">
                                                 <i class="fas fa-search"></i>
                                             </button>
                                         </div>

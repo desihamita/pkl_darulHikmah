@@ -11,7 +11,7 @@
           <div class="card card-outline">
             <div class="card-header">
               <h3 class="card-title mt-2">
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-create">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-create">
                     Tambah Data
                   </button>
                   <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-import">
@@ -27,7 +27,7 @@
                             <input type="text" name="search" class="form-control float-right" placeholder="Search" value="{{ $request->get('search') }}">
 
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -66,7 +66,7 @@
                                     <a href="#" class="ansButton" data-id="{{ $question->id }}"  data-toggle="modal" data-target="#showAnsModal">See Answers</a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-success updateButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#modal-update">Update</button>
+                                    <button class="btn btn-primary updateButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#modal-update">Update</button>
 
                                     <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-question="{{ $question->question }}" data-toggle="modal" data-target="#modal-delete">Delete</button>
                                 </td>
@@ -132,7 +132,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title">Tambah Data</h4>
-            <button id="createAnswer" class="btn btn-success ml-5">Add Answer</button>
+            <button id="createAnswer" class="btn btn-primary ml-5">Add Answer</button>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -174,7 +174,7 @@
             <div class="modal-footer">
                 <span class="error" style="color:red;"></span>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success">Save changes</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
         </form>
         </div>
@@ -229,7 +229,7 @@
                 <div class="modal-footer">
                     <span class="updateError" style="color:red;"></span>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Edit</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>
           </div>
@@ -279,7 +279,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Import Soal</button>
+                    <button type="submit" class="btn btn-primary">Import Soal</button>
                 </div>
              </form>
           </div>
